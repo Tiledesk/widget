@@ -1,5 +1,6 @@
+import { AppConfigService } from './providers/app-config.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +9,23 @@ import { ImageRepoService } from 'src/chat21-core/providers/abstract/image-repo.
 import { FirebaseImageRepoService } from 'src/chat21-core/providers/firebase/firebase-image-repo';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AvatarComponent2 } from './components/avatar/avatar.component';
+import { environment } from 'src/environments/environment';
+
+//LOGGER SERVICES
+import { LoggerInstance } from 'src/chat21-core/providers/logger/logger-instance';
+import { CustomLogger } from 'src/chat21-core/providers/logger/custom-logger';
+
+
+
+const appInitializerFn = (appConfig: AppConfigService) => {
+  return () => {
+    let customLogger = new CustomLogger()
+    LoggerInstance.setInstance(customLogger)
+    if (environment.remoteConfig) {
+      return appConfig.loadAppConfig();
+    }
+  };
+};
 
 
 export function imageRepoFactory(http: HttpClient) {
@@ -37,6 +55,13 @@ export function imageRepoFactory(http: HttpClient) {
     HttpClientModule
   ],
   providers: [
+    AppConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFn,
+      multi: true,
+      deps: [AppConfigService]
+    },
     // {
     //   provide: ImageRepoService,
     //   useFactory: imageRepoFactory,

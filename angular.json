@@ -37,10 +37,10 @@
               "src/iframe-style.css",
               "src/widget-config-template.json",
               "src/widget-config.json",
-              "src/widget-config-firebase.json",
-              "src/widget-config-mqtt.json",
-              "src/widget-config-docker.json",
-              "src/widget-config-native-mqtt.json"
+              "src/environments/real_data/widget-config-firebase.json",
+              "src/environments/real_data/widget-config-mqtt.json",
+              "src/wenvironments/real_data/idget-config-docker.json",
+              "src/environments/real_data/widget-config-native-mqtt.json"
             ],
             "styles": [
               "src/styles.scss"

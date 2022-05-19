@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ImageRepoService } from 'src/chat21-core/providers/abstract/image-repo.service';
 
 @Component({
@@ -62,6 +62,10 @@ export class AvatarComponent implements OnInit {
       callBack(false);
     };
     imageData.src = imageUrl;
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    console.log('changesssss', changes)
   }
 
 }
