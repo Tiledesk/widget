@@ -42,11 +42,11 @@ function loadIframe(tiledeskScriptBaseLocation) {
     srcTileDesk += '</head>';
     srcTileDesk += '<body>';
     srcTileDesk += '<chat-root></chat-root>';
-    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/inline.bundle.js"></script>';
-    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/polyfills.bundle.js"></script>';
-    srcTileDesk += '<script type="text/css" src="'+tiledeskScriptBaseLocation+'/styles.bundle.css"></script>';
-    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/vendor.bundle.js"></script>';
-    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/main.bundle.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/runtime.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/polyfills.js"></script>';
+    srcTileDesk += '<script type="text/css" src="'+tiledeskScriptBaseLocation+'/styles.css"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/vendor.js"></script>';
+    srcTileDesk += '<script type="text/javascript" src="'+tiledeskScriptBaseLocation+'/main.js"></script>';
     srcTileDesk += '</body>';
     srcTileDesk += '</html>';
     

@@ -1,8 +1,10 @@
-import { LogLevel } from 'src/chat21-core/utils/constants';
-import { LoggerService } from '../abstract/logger.service';
-
-export class CustomLogger extends LoggerService {
-
+import { LogLevel } from './../../utils/constants';
+import { Inject, Injectable } from '@angular/core';
+import { LoggerService } from './../abstract/logger.service';
+@Injectable()
+export class CustomLogger extends LoggerService{
+    
+    
     //private variables
     private logLevel: number = LogLevel.DEBUG
     private isLogEnabled: boolean = true;
@@ -45,4 +47,5 @@ export class CustomLogger extends LoggerService {
             console.log(message)
         }
     }
+
 }

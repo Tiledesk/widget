@@ -1,9 +1,4 @@
-// firebase
-import * as firebase from 'firebase/app';
-import 'firebase/database';
-
 export class MessageModel {
-    public sender_urlImage: string;
     constructor(
         public uid: string,
         public language: string,
@@ -11,15 +6,15 @@ export class MessageModel {
         public recipient_fullname: string,
         public sender: string,
         public sender_fullname: string,
-        public status: string,
+        public status: number,
         public metadata: any,
-        public text: any,
+        public text: string,
         public timestamp: any,
-        public headerDate: string,
+        //public headerDate: string,
         public type: string,
         public attributes: any,
         public channel_type: string,
-        public projectid: string,
+        public isSender: boolean,
         public emoticon?: boolean
     ) { }
- }
+}

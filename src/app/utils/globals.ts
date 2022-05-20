@@ -6,12 +6,13 @@ import { BehaviorSubject } from 'rxjs';
 import { CHANNEL_TYPE_GROUP } from 'src/chat21-core/utils/constants';
 
 /** MODELS */
-import { ProjectModel } from 'src/chat21-core/models/project';
-import { DepartmentModel } from 'src/chat21-core/models/department';
-import { User } from 'src/chat21-core/models/User';
+import { ProjectModel } from 'src/models/project';
+import { UserAgent } from 'src/models/userAgent';
+import { DepartmentModel } from 'src/models/department';
 
 /** UTILS FUNCTIONS */
-import { avatarPlaceholder, convertColorToRGBA, detectIfIsMobile, getParameterByName, setColorFromString } from 'src/chat21-core/utils/utils';
+import { avatarPlaceholder, convertColorToRGBA, detectIfIsMobile, getParameterByName, setColorFromString } from 'src/app/utils/utils';
+
 @Injectable({
     providedIn: 'root'
   })
@@ -41,7 +42,7 @@ export class Globals {
   BUILD_VERSION: String;
   filterSystemMsg: boolean; /** se è true i messaggi inviati da system non vengono visualizzati */
   baseLocation: string;
-  availableAgents: Array<User> = [];
+  availableAgents: Array<UserAgent> = [];
   isLogout = false; /** indica se ho appena fotto il logout */
 
   attributes: any;

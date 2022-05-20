@@ -1,25 +1,71 @@
+
+
+//ANGULAR MODULES
+import { AppRoutingModule } from './app-routing.module';
 import { AppConfigService } from './providers/app-config.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AppRoutingModule } from './app-routing.module';
+//THIRD-PART MODULES
+import { TranslateModule } from '@ngx-translate/core';
+
+
+
 import { AppComponent } from './app.component';
 import { AvatarComponent } from './avatar/avatar.component';
-import { ImageRepoService } from 'src/chat21-core/providers/abstract/image-repo.service';
-import { FirebaseImageRepoService } from 'src/chat21-core/providers/firebase/firebase-image-repo';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { AvatarComponent2 } from './components/avatar/avatar.component';
 import { environment } from 'src/environments/environment';
 
 //LOGGER SERVICES
-import { LoggerInstance } from 'src/chat21-core/providers/logger/logger-instance';
-import { CustomLogger } from 'src/chat21-core/providers/logger/custom-logger';
+import { LoggerInstance } from 'src/chat21-core/providers/logger/loggerInstance';
+import { CustomLogger } from 'src/chat21-core/providers/logger/customLogger';
+
+//ABSTRACT SERVICES
+
+
+//FIREBASE SERVICES
+import { FirebaseInitService } from 'src/chat21-core/providers/firebase/firebase-init-service';
+import { FirebaseAuthService } from 'src/chat21-core/providers/firebase/firebase-auth-service';
+import { FirebaseConversationsHandler } from 'src/chat21-core/providers/firebase/firebase-conversations-handler';
+import { FirebaseArchivedConversationsHandler } from 'src/chat21-core/providers/firebase/firebase-archivedconversations-handler';
+import { FirebaseConversationHandlerBuilderService } from 'src/chat21-core/providers/firebase/firebase-conversation-handler-builder.service';
+import { FirebaseConversationHandler } from 'src/chat21-core/providers/firebase/firebase-conversation-handler';
+import { FirebaseTypingService } from 'src/chat21-core/providers/firebase/firebase-typing.service';
+import { FirebasePresenceService } from 'src/chat21-core/providers/firebase/firebase-presence.service';
+import { FirebaseImageRepoService } from 'src/chat21-core/providers/firebase/firebase-image-repo';
+import { FirebaseUploadService } from 'src/chat21-core/providers/firebase/firebase-upload.service';
+
+//MQTT SERVICES
+import { Chat21Service } from 'src/chat21-core/providers/mqtt/chat-service';
+import { MQTTAuthService } from 'src/chat21-core/providers/mqtt/mqtt-auth-service';
+import { MQTTConversationsHandler } from 'src/chat21-core/providers/mqtt/mqtt-conversations-handler';
+import { MQTTArchivedConversationsHandler } from 'src/chat21-core/providers/mqtt/mqtt-archivedconversations-handler';
+import { MQTTConversationHandlerBuilderService } from 'src/chat21-core/providers/mqtt/mqtt-conversation-handler-builder.service';
+import { MQTTConversationHandler } from 'src/chat21-core/providers/mqtt/mqtt-conversation-handler';
+import { MQTTTypingService } from 'src/chat21-core/providers/mqtt/mqtt-typing.service';
+import { MQTTPresenceService } from 'src/chat21-core/providers/mqtt/mqtt-presence.service';
+
+// NATIVE TILEDESK SERVICES
+import { NativeImageRepoService } from 'src/chat21-core/providers/native/native-image-repo';
+import { NativeUploadService } from 'src/chat21-core/providers/native/native-upload-service';
+
+//CONSTANTS
+import { CHAT_ENGINE_MQTT, UPLOAD_ENGINE_NATIVE } from 'src/chat21-core/utils/constants';
+
+import { LocalSessionStorage } from 'src/chat21-core/localSessionStorage';
+
+import { AppStorageService } from 'src/chat21-core/providers/abstract/app-storage.service';
+
+
+
 
 
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
     let customLogger = new CustomLogger()
+    console.log('appInitializer...')
     LoggerInstance.setInstance(customLogger)
     if (environment.remoteConfig) {
       return appConfig.loadAppConfig();
@@ -28,18 +74,99 @@ const appInitializerFn = (appConfig: AppConfigService) => {
 };
 
 
-export function imageRepoFactory(http: HttpClient) {
-  //const config = appConfig.getConfig()
-  // if (config.uploadEngine === UPLOAD_ENGINE_NATIVE) {
-  //   const imageService = new NativeImageRepoService(http)
-  //   imageService.setImageBaseUrl(config.baseImageUrl)
-  //   return imageService
-  // } else {
-  //   const imageService = new FirebaseImageRepoService(http);
-  //   FirebaseInitService.initFirebase(config.firebaseConfig)
-  //   imageService.setImageBaseUrl(config.baseImageUrl)
-  //   return imageService
-  // }
+export function authenticationFactory(http: HttpClient, appConfig: AppConfigService, chat21Service: Chat21Service, appSorage: AppStorageService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
+    chat21Service.config = config.chat21Config;
+    chat21Service.initChat();
+    const auth = new MQTTAuthService(http, chat21Service, appSorage);
+    auth.setBaseUrl(appConfig.getConfig().apiUrl)
+    return auth
+  } else {
+    FirebaseInitService.initFirebase(config.firebaseConfig)
+    const auth= new FirebaseAuthService(http);
+    auth.setBaseUrl(config.apiUrl)
+    return auth
+  }
+}
+
+export function conversationsHandlerFactory(chat21Service: Chat21Service, httpClient: HttpClient, appConfig: AppConfigService ) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
+    return new MQTTConversationsHandler(chat21Service);
+  } else {
+    return new FirebaseConversationsHandler(httpClient, appConfig);
+  }
+}
+
+export function archivedConversationsHandlerFactory(chat21Service: Chat21Service, appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
+    return new MQTTArchivedConversationsHandler(chat21Service);
+  } else {
+    return new FirebaseArchivedConversationsHandler();
+  }
+}
+
+export function conversationHandlerBuilderFactory(chat21Service: Chat21Service, appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
+    return new MQTTConversationHandlerBuilderService(chat21Service);
+  } else {
+    return new FirebaseConversationHandlerBuilderService();
+  }
+}
+
+export function conversationHandlerFactory(chat21Service: Chat21Service, appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
+    return new MQTTConversationHandler(chat21Service, true);
+  } else {
+    return new FirebaseConversationHandler(true);
+  }
+}
+
+export function typingFactory(appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
+    return new MQTTTypingService();
+  } else {  
+    return new FirebaseTypingService(); 
+  }
+}
+
+export function presenceFactory(appConfig: AppConfigService) {
+  const config = appConfig.getConfig()
+  if (config.chatEngine === CHAT_ENGINE_MQTT) {
+    return new MQTTPresenceService();
+  } else {
+    return new FirebasePresenceService();
+  }
+}
+
+export function imageRepoFactory(appConfig: AppConfigService, http: HttpClient) {
+  const config = appConfig.getConfig()
+  if (config.uploadEngine === UPLOAD_ENGINE_NATIVE) {
+    const imageService = new NativeImageRepoService(http)
+    imageService.setImageBaseUrl(config.baseImageUrl)
+    return imageService
+  } else {
+    const imageService = new FirebaseImageRepoService(http);
+    FirebaseInitService.initFirebase(config.firebaseConfig)
+    imageService.setImageBaseUrl(config.baseImageUrl)
+    return imageService
+  }
+}
+
+export function uploadFactory(http: HttpClient, appConfig: AppConfigService, appStorage: AppStorageService) {
+  const config = appConfig.getConfig()
+  if (config.uploadEngine === UPLOAD_ENGINE_NATIVE) {
+    const nativeUploadService = new NativeUploadService(http, appStorage)
+    nativeUploadService.setBaseUrl(config.apiUrl)
+    return nativeUploadService
+  } else {
+    return new FirebaseUploadService();
+  }
 }
 
 
@@ -47,20 +174,35 @@ export function imageRepoFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     AvatarComponent,
-    AvatarComponent2
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule.forRoot(//),
+    {
+      // loader: {
+      //   provide: TranslateLoader,
+      //   useFactory: (createTranslateLoader),
+      //   deps: [HttpClient]
+      // }
+    }),
   ],
   providers: [
     AppConfigService,
+    Chat21Service,
+    
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
       deps: [AppConfigService]
+    },
+    {
+      provide: AppStorageService,
+      useClass: LocalSessionStorage
     },
     // {
     //   provide: ImageRepoService,

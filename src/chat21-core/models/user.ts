@@ -1,14 +1,16 @@
-export interface User {
-    id: string;
-    firstname: string;
-    updatedAt: any;
-    createdAt: any;
-    id_project: string;
-    id_user: string;
-    user_available?: boolean;
-    role: string;
-    createdBy: string;
-    is_group_member: boolean;
-    __v: any;
-    imageurl: string;
+export class UserModel {
+  constructor(
+    public uid: string,
+    public email?: string,
+    public firstname?: string,
+    public lastname?: string,
+    public fullname?: string,
+    public imageurl?: string,
+    public avatar?: string,
+    public color?: string,
+    public checked?: boolean,
+    public online?: boolean,
+    public lastConnection?: string,
+    public decoded?: any
+  ) { }
 }

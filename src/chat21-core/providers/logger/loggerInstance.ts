@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 import { LoggerService } from '../abstract/logger.service';
+import { CustomLogger } from './customLogger';
 
-@Injectable({
-    providedIn: 'root'
-})
-export class LoggerInstance {
-
+@Injectable()
+export class LoggerInstance  {
+    
+    
     //private variables
     private static instance: LoggerService;
     
@@ -16,4 +16,5 @@ export class LoggerInstance {
     static setInstance(loggerService: LoggerService) {
         LoggerInstance.instance = loggerService
     }
+
 }
