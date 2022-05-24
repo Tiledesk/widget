@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Globals } from '../../utils/globals';
 
 import { EyeeyeCatcherCardComponent } from './eyeeye-catcher-card.component';
@@ -8,7 +8,7 @@ describe('EyeeyeCatcherCardComponent', () => {
   let component: EyeeyeCatcherCardComponent;
   let fixture: ComponentFixture<EyeeyeCatcherCardComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EyeeyeCatcherCardComponent ],
       imports: [
