@@ -147,7 +147,7 @@ function loadIframe(tiledeskScriptBaseLocation) {
 
     /** */
     window.tiledesk.on('onAuthStateChanged', function(event_data) {
-        // console.log("test-custom-auth.html onAuthStateChanged",event_data);
+        console.log("test-custom-auth.html onAuthStateChanged",event_data);
         const tiledeskToken = window.tiledesk.angularcomponent.component.g.tiledeskToken;
         // console.log("------------------->>>> tiledeskToken: ",window.tiledesk.angularcomponent.component.g);
         if(tiledeskToken) {

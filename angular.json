@@ -43,7 +43,8 @@
               "src/environments/real_data/widget-config-native-mqtt.json"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/app/sass/styles.scss"
             ],
             "scripts": [
               "src/assets/js/mqtt/4.2.6/mqtt.min.js"

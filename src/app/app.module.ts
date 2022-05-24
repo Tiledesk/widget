@@ -1,5 +1,3 @@
-
-
 //ANGULAR MODULES
 import { AppRoutingModule } from './app-routing.module';
 import { AppConfigService } from './providers/app-config.service';
@@ -7,22 +5,36 @@ import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 //THIRD-PART MODULES
 import { TranslateModule } from '@ngx-translate/core';
+import { MomentModule } from 'angular2-moment';
 
+//DIRECTIVES
+import { HtmlEntitiesEncodePipe } from './directives/html-entities-encode.pipe';
+import { MarkedPipe } from './directives/marked.pipe';
+import { SafeHtmlPipe } from './directives/safe-html.pipe';
 
-
+//COMPONENTS
 import { AppComponent } from './app.component';
-import { AvatarComponent } from './avatar/avatar.component';
-import { environment } from 'src/environments/environment';
+
 
 //LOGGER SERVICES
 import { LoggerInstance } from 'src/chat21-core/providers/logger/loggerInstance';
 import { CustomLogger } from 'src/chat21-core/providers/logger/customLogger';
 
 //ABSTRACT SERVICES
-
+import { AppStorageService } from 'src/chat21-core/providers/abstract/app-storage.service';
+import { MessagingAuthService } from 'src/chat21-core/providers/abstract/messagingAuth.service';
+import { ConversationsHandlerService } from 'src/chat21-core/providers/abstract/conversations-handler.service';
+import { ArchivedConversationsHandlerService } from 'src/chat21-core/providers/abstract/archivedconversations-handler.service';
+import { ConversationHandlerBuilderService } from 'src/chat21-core/providers/abstract/conversation-handler-builder.service';
+import { ConversationHandlerService } from 'src/chat21-core/providers/abstract/conversation-handler.service';
+import { ImageRepoService } from 'src/chat21-core/providers/abstract/image-repo.service';
+import { PresenceService } from 'src/chat21-core/providers/abstract/presence.service';
+import { TypingService } from 'src/chat21-core/providers/abstract/typing.service';
+import { UploadService } from 'src/chat21-core/providers/abstract/upload.service';
 
 //FIREBASE SERVICES
 import { FirebaseInitService } from 'src/chat21-core/providers/firebase/firebase-init-service';
@@ -47,6 +59,7 @@ import { MQTTTypingService } from 'src/chat21-core/providers/mqtt/mqtt-typing.se
 import { MQTTPresenceService } from 'src/chat21-core/providers/mqtt/mqtt-presence.service';
 
 // NATIVE TILEDESK SERVICES
+import { TiledeskAuthService } from './../chat21-core/providers/tiledesk/tiledesk-auth.service';
 import { NativeImageRepoService } from 'src/chat21-core/providers/native/native-image-repo';
 import { NativeUploadService } from 'src/chat21-core/providers/native/native-upload-service';
 
@@ -55,9 +68,16 @@ import { CHAT_ENGINE_MQTT, UPLOAD_ENGINE_NATIVE } from 'src/chat21-core/utils/co
 
 import { LocalSessionStorage } from 'src/chat21-core/localSessionStorage';
 
-import { AppStorageService } from 'src/chat21-core/providers/abstract/app-storage.service';
 
-
+import { TranslatorService } from './providers/translator.service';
+import { Globals } from './utils/globals';
+import { GlobalSettingsService } from './providers/global-settings.service';
+import { Triggerhandler } from 'src/chat21-core/utils/triggerHandler';
+import { CustomTranslateService } from 'src/chat21-core/custom-translate.service';
+import { SettingsSaverService } from './providers/settings-saver.service';
+import { LauncherButtonComponent } from './component/launcher-button/launcher-button.component';
+import { EyeeyeCatcherCardComponent } from './component/eyeeye-catcher-card/eyeeye-catcher-card.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -173,14 +193,21 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
 @NgModule({
   declarations: [
     AppComponent,
-    AvatarComponent,
+    LauncherButtonComponent,
+    EyeeyeCatcherCardComponent,
+    /**DIRECTIVES */
+    HtmlEntitiesEncodePipe,
+    MarkedPipe,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    MomentModule,
     TranslateModule.forRoot(//),
     {
       // loader: {
@@ -193,7 +220,9 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
   providers: [
     AppConfigService,
     Chat21Service,
-    
+    Globals,
+    GlobalSettingsService,
+    SettingsSaverService,
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
@@ -204,12 +233,56 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
       provide: AppStorageService,
       useClass: LocalSessionStorage
     },
-    // {
-    //   provide: ImageRepoService,
-    //   useFactory: imageRepoFactory,
-    //   deps: [AppConfigService, HttpClient]
-    // }
-  ,],
+    {
+      provide: MessagingAuthService,
+      useFactory: authenticationFactory,
+      deps: [HttpClient, AppConfigService, Chat21Service, AppStorageService ]
+    },
+    {
+      provide: ConversationsHandlerService,
+      useFactory: conversationsHandlerFactory,
+      deps: [Chat21Service, HttpClient, AppConfigService]
+    },
+    {
+      provide: ArchivedConversationsHandlerService,
+      useFactory: archivedConversationsHandlerFactory,
+      deps: [Chat21Service, AppConfigService]
+    },
+    {
+      provide: ConversationHandlerBuilderService,
+      useFactory: conversationHandlerBuilderFactory,
+      deps: [Chat21Service, AppConfigService]
+    },
+    {
+      provide: ConversationHandlerService,
+      useFactory: conversationHandlerFactory,
+      deps: [Chat21Service, AppConfigService]
+    },
+    {
+      provide: ImageRepoService,
+      useFactory: imageRepoFactory,
+      deps: [AppConfigService, HttpClient]
+    },
+    {
+      provide: PresenceService,
+      useFactory: presenceFactory,
+      deps: [AppConfigService]
+    },
+    {
+      provide: TypingService,
+      useFactory: typingFactory,
+      deps: [AppConfigService]
+    },
+    {
+      provide: UploadService,
+      useFactory: uploadFactory,
+      deps: [HttpClient, AppConfigService, AppStorageService ]
+    },
+    TiledeskAuthService,
+    TranslatorService,
+    CustomTranslateService,
+    Triggerhandler
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
