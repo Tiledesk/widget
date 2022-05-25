@@ -1,3 +1,6 @@
+import { SelectionDepartmentComponent } from './component/selection-department/selection-department.component';
+import { DepartmentModel } from 'src/models/department';
+import { MenuOptionsComponent } from './component/menu-options/menu-options.component';
 import { ListAllConversationsComponent } from './component/list-all-conversations/list-all-conversations.component';
 //ANGULAR MODULES
 import { AppRoutingModule } from './app-routing.module';
@@ -204,6 +207,8 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     HomeComponent,
     ListConversationsComponent,
     ListAllConversationsComponent,
+    MenuOptionsComponent,
+    SelectionDepartmentComponent,
     /**DIRECTIVES */
     HtmlEntitiesEncodePipe,
     MarkedPipe,

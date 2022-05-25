@@ -50,6 +50,29 @@
   </div>
   
   
+  <!-- 
+  ****************************************
+  ******* MODALE SELECT DEPARTMENT *******
+  ****************************************
+  [class.active]="isOpenSelectionDepartment" -->
+  <div *ngIf="isOpenSelectionDepartment" class="modal-page selection-department active">
+    <chat-selection-department
+        (onBeforeDepartmentsFormRender)="triggerHandler.triggerOnbeforeDepartmentsFormRender($event)" 
+        (onClose)="onCloseModalDepartment()"
+        (onDepartmentSelected)="onDepartmentSelected($event)">
+    </chat-selection-department>
+  </div>
+
+  <!-- 
+  *************************************************************    
+  **************  NK EYE-CATCHER (aka CALLOUT) ****************
+  ************************************************************* 
+  tabindex -> 20 -->
+  <chat-eyeeye-catcher-card *ngIf="g.senderId"
+      (onOpenChat)="onOpenChatEyeEyeCatcherCard()"
+      (onCloseEyeCatcherCard)="onCloseEyeCatcherCard($event)">
+  </chat-eyeeye-catcher-card> 
+
   <!-- ****** LAUNCHER BUTTON ****** -->
   <!-- tabindex -> 10 -->
   <chat-launcher-button *ngIf="isInitialized" 
