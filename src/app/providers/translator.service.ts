@@ -33,7 +33,7 @@ export class TranslatorService {
     public appConfigService: AppConfigService
   ) {
 
-    let windowContext = window;
+    let windowContext: Window = window;
     if (window.frameElement && window.frameElement.getAttribute('tiledesk_context') === 'parent') {
       windowContext = window.parent;
     }
@@ -150,10 +150,10 @@ export class TranslatorService {
       .pipe(
         catchError((error: any)=>{
             // I18N File failed to load, fall back to default language
-            console.log(`»»»» initI18n !!! Problem with '${browserLang}' language initialization from URL `, this.getTranslationFileUrl(browserLang), ` - ERROR: `, error);
+            // console.log(`»»»» initI18n !!! Problem with '${browserLang}' language initialization from URL `, this.getTranslationFileUrl(browserLang), ` - ERROR: `, error);
             this._translate.use(defaultLanguage);
             this.http.get(this.getTranslationFileUrl(defaultLanguage)).subscribe((data) => {
-              this.translateWithBrowserLang(data['_body'], defaultLanguage);
+              this.translateWithBrowserLang(data['data'], defaultLanguage);
             }, (er) => {
               // failed to load  default language from remote - fall back to local default language
               this.logger.error('[TRANSLATOR-SERV] »»»» initI18n Get default language - ERROR ', er);
@@ -167,7 +167,7 @@ export class TranslatorService {
      )
      .subscribe((data: any) => {
         // I18N File loaded successfully, we can proceed
-        // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data);
+        // console.log(`»»»» Successfully initialized '${browserLang}' language.'`, data.data);
         this.logger.debug(`[TRANSLATOR-SERV] »»»» initI18n Successfully initialized '${browserLang}' language from URL'`, this.getTranslationFileUrl(browserLang));
         if (!data.data || data.data === undefined || data.data === '') {
           browserLang = defaultLanguage;
@@ -195,16 +195,14 @@ export class TranslatorService {
   }
 
 
-  private translateWithBrowserLang(body: any, lang: string) {
+  private translateWithBrowserLang(data: any, lang: string) {
     this._translate.use(lang);
     this.logger.debug(`[TRANSLATOR-SERV] »»»» initI18n - »»» loadRemoteTranslations ?`, environment.loadRemoteTranslations);
     if (environment.loadRemoteTranslations) {
-      const remote_translation_res = body;
-      // console.log(`»»»» initI18n - »»» remote translation response`, remote_translation_res);
-      // console.log(`»»»» initI18n - »»» remote translation `, remote_translation_res.data);
-      this._translate.setTranslation(lang, remote_translation_res.data, true);
+      // console.log(`»»»» initI18n - »»» remote translation `, data);
+      this._translate.setTranslation(lang, data, true);
     } else {
-      this._translate.setTranslation(lang, body, true);
+      this._translate.setTranslation(lang, data, true);
     }
   }
 

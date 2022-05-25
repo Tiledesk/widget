@@ -23,8 +23,8 @@ export class FirebaseAuthService extends MessagingAuthService {
 
 
   // BehaviorSubject
-  BSAuthStateChanged: BehaviorSubject<any>;
-  BSSignOut: BehaviorSubject<any>;
+  BSAuthStateChanged: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  BSSignOut: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   // firebaseSignInWithCustomToken: BehaviorSubject<any>;
 
   // public params

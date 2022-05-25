@@ -1,3 +1,4 @@
+import { ListAllConversationsComponent } from './component/list-all-conversations/list-all-conversations.component';
 //ANGULAR MODULES
 import { AppRoutingModule } from './app-routing.module';
 import { AppConfigService } from './providers/app-config.service';
@@ -78,6 +79,10 @@ import { SettingsSaverService } from './providers/settings-saver.service';
 import { LauncherButtonComponent } from './component/launcher-button/launcher-button.component';
 import { EyeeyeCatcherCardComponent } from './component/eyeeye-catcher-card/eyeeye-catcher-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { WaitingService } from './providers/waiting.service';
+import { HomeConversationsComponent } from './component/home-conversations/home-conversations.component';
+import { HomeComponent } from './component/home/home.component';
+import { ListConversationsComponent } from './component/list-conversations/list-conversations.component';
 
 
 
@@ -195,6 +200,10 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     AppComponent,
     LauncherButtonComponent,
     EyeeyeCatcherCardComponent,
+    HomeConversationsComponent,
+    HomeComponent,
+    ListConversationsComponent,
+    ListAllConversationsComponent,
     /**DIRECTIVES */
     HtmlEntitiesEncodePipe,
     MarkedPipe,
@@ -281,7 +290,8 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     TiledeskAuthService,
     TranslatorService,
     CustomTranslateService,
-    Triggerhandler
+    Triggerhandler,
+    WaitingService
   ],
   bootstrap: [AppComponent]
 })

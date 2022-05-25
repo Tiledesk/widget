@@ -1,5 +1,5 @@
 import { Globals } from './utils/globals';
-import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { LoggerService } from 'src/chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from 'src/chat21-core/providers/logger/loggerInstance';
 import { TiledeskAuthService } from 'src/chat21-core/providers/tiledesk/tiledesk-auth.service';
@@ -49,7 +49,7 @@ interface MessageObj {
   selector: 'chat-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  // encapsulation: ViewEncapsulation.None /* it allows to customize 'Powered By' */
+  encapsulation: ViewEncapsulation.None /* it allows to customize 'Powered By' */
   // providers: [AgentAvailabilityService, TranslatorService]
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {

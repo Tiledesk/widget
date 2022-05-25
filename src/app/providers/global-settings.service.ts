@@ -455,7 +455,7 @@ export class GlobalSettingsService {
                         globals['calloutTimer'] = variables['calloutTimer'];
                     }
                     if (variables.hasOwnProperty('dynamicWaitTimeReply')) {
-                        globals['dynamicWaitTimeReply'] = variables['dynamicWaitTimeReply'];
+                        globals['dynamicWaitTimeReply'] =  stringToBoolean(variables['dynamicWaitTimeReply']);
                     }
                     if (variables.hasOwnProperty('logoChat')) {
                         globals['logoChat'] = variables['logoChat'];
@@ -808,7 +808,7 @@ export class GlobalSettingsService {
         TEMP = tiledeskSettings['dynamicWaitTimeReply'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > dynamicWaitTimeReply:: ', TEMP]);
         if (TEMP !== undefined) {
-            globals.dynamicWaitTimeReply = TEMP;
+            globals.dynamicWaitTimeReply =  stringToBoolean(TEMP);
         }
         TEMP = tiledeskSettings['soundEnabled'];
         // this.logger.debug('[GLOBAL-SET] setVariablesFromSettings > soundEnabled:: ', TEMP]);
@@ -1086,7 +1086,7 @@ export class GlobalSettingsService {
         // }
         TEMP = el.nativeElement.getAttribute('dynamicWaitTimeReply');
         if (TEMP !== null) {
-            this.globals.dynamicWaitTimeReply = TEMP;
+            this.globals.dynamicWaitTimeReply =  stringToBoolean(TEMP);
         }
         TEMP = el.nativeElement.getAttribute('soundEnabled');
         if (TEMP !== null) {

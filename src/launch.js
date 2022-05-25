@@ -279,7 +279,6 @@ function initWidget() {
         window.tiledesk = new function() {
             //this.type = "macintosh";
             this.tiledeskroot = tiledeskroot;
-            console.log(" this.tiledeskroot",  this.tiledeskroot);
             this.on = function (event_name, handler) {
                 //console.log("addEventListener for "+ event_name, handler);
                 tiledeskroot.addEventListener(event_name, handler);
