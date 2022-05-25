@@ -53,7 +53,7 @@
   <!-- 
   ****************************************
   ******* MODALE SELECT DEPARTMENT *******
-  ****************************************
+  *************** STEP 1 *****************
   [class.active]="isOpenSelectionDepartment" -->
   <div *ngIf="isOpenSelectionDepartment" class="modal-page selection-department active">
     <chat-selection-department
@@ -63,10 +63,25 @@
     </chat-selection-department>
   </div>
 
+
   <!-- 
-  *************************************************************    
-  **************  NK EYE-CATCHER (aka CALLOUT) ****************
-  ************************************************************* 
+  *******************************************
+  *********** MODALE PRECHAT FORM ***********
+  **************** STEP 2 *******************
+  [class.active]="g.isOpenPrechatForm === true"
+  -->
+  <div *ngIf="g.isOpenPrechatForm" class="modal-page prechat-form active">
+    <chat-prechat-form
+        [stylesMap]="styleMapConversation"
+        (onClosePage)="onCloseModalPrechatForm()" 
+        (onCloseForm)="onPrechatFormComplete()">
+    </chat-prechat-form>
+</div>
+
+  <!-- 
+  *******************************************
+  ******* EYE-CATCHER (aka CALLOUT) *********
+  *******************************************
   tabindex -> 20 -->
   <chat-eyeeye-catcher-card *ngIf="g.senderId"
       (onOpenChat)="onOpenChatEyeEyeCatcherCard()"

@@ -1,3 +1,6 @@
+import { FormSelectComponent } from './component/form/inputs/form-select/form-select.component';
+import { FormRadioButtonComponent } from './component/form/inputs/form-radio-button/form-radio-button.component';
+import { PrechatFormComponent } from './component/form/prechat-form/prechat-form.component';
 import { SelectionDepartmentComponent } from './component/selection-department/selection-department.component';
 import { DepartmentModel } from 'src/models/department';
 import { MenuOptionsComponent } from './component/menu-options/menu-options.component';
@@ -86,6 +89,11 @@ import { WaitingService } from './providers/waiting.service';
 import { HomeConversationsComponent } from './component/home-conversations/home-conversations.component';
 import { HomeComponent } from './component/home/home.component';
 import { ListConversationsComponent } from './component/list-conversations/list-conversations.component';
+import { FormBuilderComponent } from './component/form/form-builder/form-builder.component';
+import { FormTextComponent } from './component/form/inputs/form-text/form-text.component';
+import { FormLabelComponent } from './component/form/inputs/form-label/form-label.component';
+import { FormCheckboxComponent } from './component/form/inputs/form-checkbox/form-checkbox.component';
+import { FormTextareaComponent } from './component/form/inputs/form-textarea/form-textarea.component';
 
 
 
@@ -209,6 +217,15 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     ListAllConversationsComponent,
     MenuOptionsComponent,
     SelectionDepartmentComponent,
+    /**FORM COMPONENTS */
+    PrechatFormComponent,
+    FormBuilderComponent,
+    FormTextComponent,
+    FormLabelComponent,
+    FormCheckboxComponent,
+    FormTextareaComponent,
+    FormRadioButtonComponent,
+    FormSelectComponent,
     /**DIRECTIVES */
     HtmlEntitiesEncodePipe,
     MarkedPipe,
