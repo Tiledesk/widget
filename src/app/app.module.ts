@@ -1,3 +1,24 @@
+import { MomentModule } from 'ngx-moment';
+import { MessageAttachmentComponent } from './component/message-attachment/message-attachment.component';
+import { UserTypingComponent } from './../chat21-core/utils/user-typing/user-typing.component';
+import { StarRatingWidgetComponent } from './component/star-rating-widget/star-rating-widget.component';
+import { TextButtonComponent } from './component/message/buttons/text-button/text-button.component';
+import { LinkButtonComponent } from './component/message/buttons/link-button/link-button.component';
+import { ActionButtonComponent } from './component/message/buttons/action-button/action-button.component';
+import { TextComponent } from './component/message/text/text.component';
+import { ReturnReceiptComponent } from './component/message/return-receipt/return-receipt.component';
+import { InfoMessageComponent } from './component/message/info-message/info-message.component';
+import { ImageComponent } from './component/message/image/image.component';
+import { HtmlComponent } from './component/message/html/html.component';
+import { FrameComponent } from './component/message/frame/frame.component';
+import { AvatarComponent } from './component/message/avatar/avatar.component';
+import { ConversationInternalFrameComponent } from './component/conversation-detail/conversation-internal-frame/conversation-internal-frame.component';
+import { ConversationPreviewComponent } from './component/conversation-detail/conversation-preview/conversation-preview.component';
+import { BubbleMessageComponent } from './component/message/bubble-message/bubble-message.component';
+import { ConversationFooterComponent } from './component/conversation-detail/conversation-footer/conversation-footer.component';
+import { ConversationContentComponent } from './component/conversation-detail/conversation-content/conversation-content.component';
+import { ConversationHeaderComponent } from './component/conversation-detail/conversation-header/conversation-header.component';
+import { ConversationComponent } from './component/conversation-detail/conversation/conversation.component';
 import { FormSelectComponent } from './component/form/inputs/form-select/form-select.component';
 import { FormRadioButtonComponent } from './component/form/inputs/form-radio-button/form-radio-button.component';
 import { PrechatFormComponent } from './component/form/prechat-form/prechat-form.component';
@@ -16,7 +37,6 @@ import { environment } from 'src/environments/environment';
 
 //THIRD-PART MODULES
 import { TranslateModule } from '@ngx-translate/core';
-import { MomentModule } from 'angular2-moment';
 
 //DIRECTIVES
 import { HtmlEntitiesEncodePipe } from './directives/html-entities-encode.pipe';
@@ -73,14 +93,14 @@ import { NativeUploadService } from 'src/chat21-core/providers/native/native-upl
 //CONSTANTS
 import { CHAT_ENGINE_MQTT, UPLOAD_ENGINE_NATIVE } from 'src/chat21-core/utils/constants';
 
-import { LocalSessionStorage } from 'src/chat21-core/localSessionStorage';
+import { LocalSessionStorage } from 'src/chat21-core/providers/localSessionStorage';
 
 
 import { TranslatorService } from './providers/translator.service';
 import { Globals } from './utils/globals';
 import { GlobalSettingsService } from './providers/global-settings.service';
 import { Triggerhandler } from 'src/chat21-core/utils/triggerHandler';
-import { CustomTranslateService } from 'src/chat21-core/custom-translate.service';
+import { CustomTranslateService } from 'src/chat21-core/providers/custom-translate.service';
 import { SettingsSaverService } from './providers/settings-saver.service';
 import { LauncherButtonComponent } from './component/launcher-button/launcher-button.component';
 import { EyeeyeCatcherCardComponent } from './component/eyeeye-catcher-card/eyeeye-catcher-card.component';
@@ -94,6 +114,8 @@ import { FormTextComponent } from './component/form/inputs/form-text/form-text.c
 import { FormLabelComponent } from './component/form/inputs/form-label/form-label.component';
 import { FormCheckboxComponent } from './component/form/inputs/form-checkbox/form-checkbox.component';
 import { FormTextareaComponent } from './component/form/inputs/form-textarea/form-textarea.component';
+import { StarRatingWidgetService } from './providers/star-rating-widget.service';
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 
 
@@ -217,6 +239,8 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     ListAllConversationsComponent,
     MenuOptionsComponent,
     SelectionDepartmentComponent,
+    StarRatingWidgetComponent,
+    MessageAttachmentComponent,
     /**FORM COMPONENTS */
     PrechatFormComponent,
     FormBuilderComponent,
@@ -226,6 +250,25 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     FormTextareaComponent,
     FormRadioButtonComponent,
     FormSelectComponent,
+    /**CONVERSATION-DETAILL COMPONENTS */
+    ConversationComponent,
+    ConversationHeaderComponent,
+    ConversationContentComponent,
+    ConversationFooterComponent,
+    ConversationPreviewComponent,
+    ConversationInternalFrameComponent,
+    BubbleMessageComponent,
+    AvatarComponent,
+    FrameComponent,
+    HtmlComponent,
+    ImageComponent,
+    InfoMessageComponent,
+    ReturnReceiptComponent,
+    TextComponent,
+    ActionButtonComponent,
+    LinkButtonComponent,
+    TextButtonComponent,
+    UserTypingComponent,
     /**DIRECTIVES */
     HtmlEntitiesEncodePipe,
     MarkedPipe,
@@ -239,6 +282,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     FormsModule,
     ReactiveFormsModule,
     MomentModule,
+    TooltipModule,
     TranslateModule.forRoot(//),
     {
       // loader: {
@@ -254,6 +298,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     Globals,
     GlobalSettingsService,
     SettingsSaverService,
+    StarRatingWidgetService,
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,

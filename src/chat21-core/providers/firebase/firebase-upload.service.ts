@@ -24,7 +24,7 @@ import { LoggerInstance } from '../logger/loggerInstance';
 export class FirebaseUploadService extends UploadService {
   
   // BehaviorSubject
-  BSStateUpload: BehaviorSubject<any>;
+  BSStateUpload: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   //private
   private logger:LoggerService = LoggerInstance.getInstance()

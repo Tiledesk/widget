@@ -11,7 +11,7 @@ import { GlobalSettingsService } from './providers/global-settings.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { AppStorageService } from 'src/chat21-core/providers/abstract/app-storage.service';
 import { environment } from 'src/environments/environment';
-import { ChatManager } from 'src/chat21-core/chat-manager';
+import { ChatManager } from 'src/chat21-core/providers/chat-manager';
 import { UploadService } from 'src/chat21-core/providers/abstract/upload.service';
 import { UserModel } from 'src/chat21-core/models/user';
 import { Triggerhandler } from 'src/chat21-core/utils/triggerHandler';
@@ -19,7 +19,7 @@ import { ConversationModel } from 'src/chat21-core/models/conversation';
 import { AUTH_STATE_OFFLINE, AUTH_STATE_ONLINE, TYPE_MSG_FILE, TYPE_MSG_IMAGE, URL_SOUND_LIST_CONVERSATION } from 'src/chat21-core/utils/constants';
 import { TypingService } from 'src/chat21-core/providers/abstract/typing.service';
 import { PresenceService } from 'src/chat21-core/providers/abstract/presence.service';
-import { CustomTranslateService } from 'src/chat21-core/custom-translate.service';
+import { CustomTranslateService } from 'src/chat21-core/providers/custom-translate.service';
 import { ConversationsHandlerService } from 'src/chat21-core/providers/abstract/conversations-handler.service';
 import { ArchivedConversationsHandlerService } from 'src/chat21-core/providers/abstract/archivedconversations-handler.service';
 import { ConversationHandlerBuilderService } from 'src/chat21-core/providers/abstract/conversation-handler-builder.service';
@@ -1582,7 +1582,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
      * CONVERSATION DETAIL FOOTER:
      * floating button -> start new Conversation();
      */
-    onNewConversationButtonClicked(){
+    onNewConversationButtonClicked(event){
         this.logger.debug('[APP-COMP] onNewConversationButtonClicked');
         
         this.isOpenConversation = false;

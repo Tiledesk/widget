@@ -4,15 +4,15 @@ import { BehaviorSubject } from 'rxjs';
 // import 'rxjs/add/operator/map';
 
 // models
-import { UserModel } from './models/user';
+import { UserModel } from '../models/user';
 
 // handlers
-import { ArchivedConversationsHandlerService } from './providers/abstract/archivedconversations-handler.service';
-import { ConversationHandlerService } from './providers/abstract/conversation-handler.service';
-import { ConversationsHandlerService } from './providers/abstract/conversations-handler.service';
+import { ArchivedConversationsHandlerService } from './abstract/archivedconversations-handler.service';
+import { ConversationHandlerService } from './abstract/conversation-handler.service';
+import { ConversationsHandlerService } from './abstract/conversations-handler.service';
 
-import { LoggerService } from './providers/abstract/logger.service';
-import { LoggerInstance } from './providers/logger/loggerInstance';
+import { LoggerService } from './abstract/logger.service';
+import { LoggerInstance } from './logger/loggerInstance';
 
 
 @Injectable({ providedIn: 'root' })

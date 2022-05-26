@@ -12,6 +12,7 @@ import { DepartmentModel } from 'src/models/department';
 
 /** UTILS FUNCTIONS */
 import { avatarPlaceholder, convertColorToRGBA, detectIfIsMobile, getParameterByName, setColorFromString } from 'src/app/utils/utils';
+import { ConversationModel } from 'src/chat21-core/models/conversation';
 
 @Injectable({
     providedIn: 'root'
@@ -52,7 +53,9 @@ export class Globals {
   firebaseToken: string;
   lang: string;
   conversationsBadge: number;
-
+  /**@deprecated */
+  activeConversation: ConversationModel;
+  
   isOpenStartRating: boolean;
   departments: DepartmentModel[];
   departmentSelected: DepartmentModel;

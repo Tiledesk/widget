@@ -23,8 +23,8 @@ import { ImageRepoService } from 'src/chat21-core/providers/abstract/image-repo.
 import { LoggerService } from 'src/chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from 'src/chat21-core/providers/logger/loggerInstance';
 import { TranslatorService } from 'src/app/providers/translator.service';
-import { CustomTranslateService } from 'src/chat21-core/custom-translate.service';
-import { ChatManager } from 'src/chat21-core/chat-manager';
+import { CustomTranslateService } from 'src/chat21-core/providers/custom-translate.service';
+import { ChatManager } from 'src/chat21-core/providers/chat-manager';
 import { UserAgent } from 'src/models/userAgent';
 import { WaitingService } from 'src/app/providers/waiting.service';
 

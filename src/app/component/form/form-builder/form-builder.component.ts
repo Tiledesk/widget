@@ -6,7 +6,7 @@ import { LoggerService } from 'src/chat21-core/providers/abstract/logger.service
 import { LoggerInstance } from 'src/chat21-core/providers/logger/loggerInstance';
 import { validateRegex } from 'src/chat21-core/utils/utils';
 import * as parser from 'accept-language-parser'
-import { CustomTranslateService } from 'src/chat21-core/custom-translate.service';
+import { CustomTranslateService } from 'src/chat21-core/providers/custom-translate.service';
 
 @Component({
   selector: 'chat-form-builder',

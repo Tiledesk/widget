@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AppStorageService } from './providers/abstract/app-storage.service';
-import { LoggerService } from './providers/abstract/logger.service';
-import { LoggerInstance } from './providers/logger/loggerInstance';
-import { STORAGE_PREFIX } from './utils/constants';
-import { supports_html5_session, supports_html5_storage } from './utils/utils';
+import { STORAGE_PREFIX } from '../utils/constants';
+import { supports_html5_session, supports_html5_storage } from '../utils/utils';
+import { AppStorageService } from './abstract/app-storage.service';
+import { LoggerService } from './abstract/logger.service';
+import { LoggerInstance } from './logger/loggerInstance';
 
 
 @Injectable()

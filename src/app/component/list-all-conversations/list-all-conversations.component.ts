@@ -6,7 +6,7 @@ import { Globals } from 'src/app/utils/globals';
 import { getUrlImgProfile, convertMessage, compareValues } from 'src/app/utils/utils';
 import { LoggerService } from 'src/chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from 'src//chat21-core/providers/logger/loggerInstance';
-import { CustomTranslateService } from 'src/chat21-core/custom-translate.service';
+import { CustomTranslateService } from 'src/chat21-core/providers/custom-translate.service';
 
 // models
 import { ConversationModel } from 'src/chat21-core/models/conversation';
