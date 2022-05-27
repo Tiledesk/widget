@@ -417,7 +417,6 @@ export class Globals {
     // this.parameters.push({'isLogged': false});  /** detect is logged */
 
     this.BUILD_VERSION = 'v.' + environment.version;
-    console.log('envvvvv', environment)
     // this.parameters['BUILD_VERSION'] = 'v.' + environment.version;
     // this.parameters.push({'BUILD_VERSION': 'v.' + environment.version});
 

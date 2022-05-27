@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
-import { popupUrl } from '../../../../chat21-core/utils/utils';
+import { popupUrl } from 'src/chat21-core/utils/utils';
 
 @Component({
   selector: 'chat-image',

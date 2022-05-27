@@ -39,7 +39,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
     messageChanged: BehaviorSubject<MessageModel> = new BehaviorSubject<MessageModel>(null);;
     messageRemoved: BehaviorSubject<string> = new BehaviorSubject<string>(null);
     messageWait: BehaviorSubject<any> = new BehaviorSubject<string>(null);
-    isTyping: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
     // public variables
     public attributes: any;
