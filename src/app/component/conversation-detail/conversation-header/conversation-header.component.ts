@@ -18,6 +18,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   @Input() soundEnabled: boolean;
   @Input() isMenuShow: boolean;
   @Input() isTrascriptDownloadEnabled: boolean;
+  @Input() hideCloseConversationOptionMenu: boolean;
   @Input() hideHeaderCloseButton: boolean;
   @Input() hideHeaderConversationOptionsMenu: boolean;
   @Input() windowContext;
@@ -27,6 +28,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   @Output() onBack = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSoundChange = new EventEmitter();
+  @Output() onCloseChat =  new EventEmitter();
   @Output() onWidgetHeightChange = new EventEmitter<string>();
   @Output() onMenuOptionShow = new EventEmitter();
   // ========= end:: Input/Output values
@@ -152,6 +154,10 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
     // this.appStorageService.removeItem('activeConversation');
     // this.g.setParameter('activeConversation', null, false);
     this.onBack.emit();
+  }
+
+  closeChat(){
+    this.onCloseChat.emit()
   }
 
   returnCloseWidget() {

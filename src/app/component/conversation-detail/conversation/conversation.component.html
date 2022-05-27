@@ -13,17 +13,19 @@
         [soundEnabled]="g?.soundEnabled"
         [isTrascriptDownloadEnabled]="isTrascriptDownloadEnabled"
         [hideHeaderCloseButton]="g?.hideHeaderCloseButton"
+        [hideCloseConversationOptionMenu]="(isConversationArchived || g?.hideCloseConversationOptionMenu)"
         [hideHeaderConversationOptionsMenu]="g?.hideHeaderConversationOptionsMenu"
         [stylesMap]="stylesMap"
         [translationMap]="translationMapHeader"
         [widgetTitle]="g?.project?.widgetTitle"
         [windowContext]="g?.windowContext"
         [isMenuShow]="isMenuShow"
-        (onBack)="returnHome()"
-        (onCloseWidget)="returnCloseWidget()"
-        (onSoundChange)="returnSoundChange($event)"
-        (onWidgetHeightChange)="returnOnWidgetHeightChange($event)"
-        (onMenuOptionShow)="returnOnMenuOption($event)">
+        (onBack)="onBackHomeFN()"
+        (onCloseWidget)="onCloseWidgetFN()"
+        (onSoundChange)="onSoundChangeFN($event)"
+        (onCloseChat)="onCloseChat($event)"
+        (onWidgetHeightChange)="onWidgetHeightChange($event)"
+        (onMenuOptionShow)="onMenuOption($event)">
     </chat-conversation-header>
 
     <!-- CONTENT -->
@@ -38,11 +40,11 @@
         [nameUserTypingNow]="nameUserTypingNow"
         [translationMap]="translationMapContent"
         [stylesMap]="stylesMap"
-        (onBeforeMessageRender)="returnOnBeforeMessageRender($event)"
-        (onAfterMessageRender)="returnOnAfterMessageRender($event)"
-        (onAttachmentButtonClicked)="returnOnAttachmentButtonClicked($event)"
-        (onScrollContent)="returnOnScrollContent($event)"
-        (onMenuOptionShow)="returnOnMenuOption($event)">
+        (onBeforeMessageRender)="onBeforeMessageRenderFN($event)"
+        (onAfterMessageRender)="onAfterMessageRenderFN($event)"
+        (onAttachmentButtonClicked)="onAttachmentButtonClicked($event)"
+        (onScrollContent)="onScrollContent($event)"
+        (onMenuOptionShow)="onMenuOption($event)">
     </chat-conversation-content>
 
     <!-- INTERNAL FRAME FOR SELF ACTION LINK BUTTONS-->
@@ -92,10 +94,10 @@
             [fileUploadAccept]="appConfigService?.getConfig().fileUploadAccept"
             [stylesMap]="stylesMap"
             [translationMap]="translationMapFooter"
-            (onBeforeMessageSent)="returnOnBeforeMessangeSent($event)"
-            (onAfterSendMessage)="returnAfterSendMessage($event)"
-            (onChangeTextArea)="returnChangeTextArea($event)"
-            (onAttachmentButtonClicked)="onAttachmentButtonClicked($event)"
+            (onBeforeMessageSent)="onBeforeMessangeSentFN($event)"
+            (onAfterSendMessage)="onAfterSendMessageFN($event)"
+            (onChangeTextArea)="onChangeTextArea($event)"
+            (onAttachmentFileButtonClicked)="onAttachmentFileButtonClicked($event)"
             (onNewConversationButtonClicked)="onNewConversationButtonClickedFN($event)">
         </chat-conversation-footer>
 

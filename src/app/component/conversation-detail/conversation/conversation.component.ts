@@ -43,6 +43,7 @@ import { TypingService } from 'src/chat21-core/providers/abstract/typing.service
 import { Globals } from 'src/app/utils/globals';
 import { AppConfigService } from 'src/app/providers/app-config.service';
 import { StarRatingWidgetService } from 'src/app/providers/star-rating-widget.service';
+import { TiledeskRequestsService } from 'src/chat21-core/providers/tiledesk/tiledesk-requests.service';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -200,6 +201,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     private customTranslateService: CustomTranslateService,
     private chatManager: ChatManager,
     public typingService: TypingService,
+    private tiledeskRequestService: TiledeskRequestsService,
     private changeDetectorRef: ChangeDetectorRef,
     private elementRef: ElementRef
   ) { }
@@ -1941,26 +1943,35 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   // ========= end:: functions send image ======= //
 
   // =========== BEGIN: event emitter function ====== //
-  returnHome() {
+  /** CALLED BY: conv-header component */
+  onBackHomeFN() {
     //this.storageService.removeItem('activeConversation');
     //this.g.setParameter('activeConversation', null, false);
     this.onBackHome.emit();
   }
-
-  returnCloseWidget() {
+  /** CALLED BY: conv-header component */
+  onCloseWidgetFN() {
     //this.g.setParameter('activeConversation', null, false);
     this.onCloseWidget.emit();
   }
-
-  returnAfterSendMessage(message: MessageModel){
-    this.onAfterSendMessage.emit(message)
-  }
-
-  returnSoundChange(soundEnabled){
+  /** CALLED BY: conv-header component */
+  onSoundChangeFN(soundEnabled){
     this.onSoundChange.emit(soundEnabled)
   }
-
-  returnOnWidgetHeightChange(mode){
+  /** CALLED BY: conv-header component */
+  onCloseChat(event){
+    this.logger.debug('[CONV-COMP] close chat with uid ', this.conversation.uid)
+    this.tiledeskRequestService.closeSupportGroup(this.conversation.uid).then(data => {
+      if(data === 'closed'){
+        this.isMenuShow = false
+        this.logger.debug('[CONV-COMP] chat closed successfully with uid ', this.conversation.uid)
+      }
+    }).catch(error => {
+      this.logger.error('[CONV-COMP] ERROR while closing chat with id: ', this.conversation.uid, error)
+    })
+  }
+  /** CALLED BY: conv-header component */
+  onWidgetHeightChange(mode){
     var tiledeskDiv = this.g.windowContext.window.document.getElementById('tiledeskdiv') 
     if(mode==='max'){
       tiledeskDiv.style.maxHeight = 'unset'
@@ -1969,20 +1980,55 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     }
     this.isMenuShow = false;
   }
-
-  returnOnBeforeMessangeSent(messageModel){
-    this.onBeforeMessageSent.emit(messageModel)
+  /** CALLED BY: conv-header conv-content component */
+  onMenuOption(event:boolean){
+    this.isMenuShow = event;
+    this.conversationFooter.removeFocusOnId('chat21-main-message-context')
   }
 
-  returnOnBeforeMessageRender(event){
+  /** CALLED BY: conv-content component */
+  onBeforeMessageRenderFN(event){
     this.onBeforeMessageRender.emit(event)
   }
-
-  returnOnAfterMessageRender(event){
+  /** CALLED BY: conv-content component */
+  onAfterMessageRenderFN(event){
     this.onAfterMessageRender.emit(event)
   }
+  /** CALLED BY: conv-content component */
+  onAttachmentButtonClicked(event: any) {
+    this.logger.debug('[CONV-COMP] eventbutton', event)
+    if (!event || !event.target.type) {
+      return;
+    }
+    switch (event.target.type) {
+      case 'url':
+        try {
+          this.openLink(event.target.button);
+        } catch (err) {
+          this.logger.error('[CONV-COMP] url > Error :' + err);
+        }
+        return;
+      case 'action':
+        try {
+          this.actionButton(event.target.button);
+        } catch (err) {
+          this.logger.error('[CONV-COMP] action > Error :' + err);
+        }
+        return false;
+      case 'text':
+        try{
+          const text = event.target.button.value
+          const metadata = { 'button': true };
+          this.conversationFooter.sendMessage(text, TYPE_MSG_TEXT, metadata);
+        }catch(err){
+          this.logger.error('[CONV-COMP] text > Error :' + err);
+        }
+      default: return;
+    }
+  }
 
-  returnOnScrollContent(event: boolean){
+  /** CALLED BY: conv-content component */
+  onScrollContent(event: boolean){
     this.showBadgeScroollToBottom = !event;
     this.logger.debug('[CONV-COMP] scroool eventtt', event)
     //se sono alla fine (showBadgeScroollBottom === true) allora imposto messageBadgeCount a 0
@@ -1993,25 +2039,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     
   }
 
-  returnOnMenuOption(event:boolean){
-      this.isMenuShow = event;
-      this.conversationFooter.removeFocusOnId('chat21-main-message-context')
+  /** CALLED BY: conv-internal-frame component */
+  onOpenExternalFrame(event){
+    window.open(event.link, '_blank');
   }
-
-  /** CALLED BY: conv-footer component */
-  onAttachmentButtonClicked(event: any){
-    this.logger.debug('[CONV-COMP] onAttachmentButtonClicked::::', event)
-    this.attachments = event.attachments
-    this.textInputTextArea= event.message
-    this.logger.debug('[CONV-COMP] onAttachmentButtonClicked::::', this.textInputTextArea)
-    this.isOpenAttachmentPreview = true
-  }
-
-  /** CALLED BY: conv-preview component */
-  onCloseModalPreview(){
-    this.isOpenAttachmentPreview = false
-    this.conversationFooter.isFilePendingToUpload = false;
-    this.logger.debug('[CONV-COMP] onCloseModalPreview::::', this.isOpenAttachmentPreview, this.conversationFooter)
+  /** CALLED BY: conv-internal-frame component */
+  onCloseInternalFrame(event){
+    this.isButtonUrl = false
+    this.buttonClicked = null;
   }
 
   /** CALLED BY: conv-preview component */
@@ -2020,8 +2055,23 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
     this.conversationFooter.uploadSingle(this.attachments[0].metadata, this.attachments[0].file, messageText)
     // send message to footer-component
   }
-
-  returnChangeTextArea(event){
+  /** CALLED BY: conv-preview component */
+  onCloseModalPreview(){
+    this.isOpenAttachmentPreview = false
+    this.conversationFooter.isFilePendingToUpload = false;
+    this.logger.debug('[CONV-COMP] onCloseModalPreview::::', this.isOpenAttachmentPreview, this.conversationFooter)
+  }
+  
+  /** CALLED BY: conv-footer component */
+  onBeforeMessangeSentFN(messageModel){
+    this.onBeforeMessageSent.emit(messageModel)
+  }
+  /** CALLED BY: conv-footer component */ 
+  onAfterSendMessageFN(message: MessageModel){
+    this.onAfterSendMessage.emit(message)
+  }
+  /** CALLED BY: conv-footer component */ 
+  onChangeTextArea(event){
     if(event && event.textAreaEl){
       const scrollDiv = this.conversationContent.scrollMe
       const height = +event.textAreaEl.style.height.substring(0, event.textAreaEl.style.height.length - 2);
@@ -2036,9 +2086,16 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
   }
-
-   /** CALLED BY: floating-button footer component */
-   onNewConversationButtonClickedFN(event){
+  /** CALLED BY: conv-footer component */
+  onAttachmentFileButtonClicked(event: any){
+    this.logger.debug('[CONV-COMP] onAttachmentButtonClicked::::', event)
+    this.attachments = event.attachments
+    this.textInputTextArea= event.message
+    this.logger.debug('[CONV-COMP] onAttachmentButtonClicked::::', this.textInputTextArea)
+    this.isOpenAttachmentPreview = true
+  }
+  /** CALLED BY: conv-footer floating-button component */
+  onNewConversationButtonClickedFN(event){
     this.logger.debug('[CONV-COMP] floating onNewConversationButtonClicked')
     this.onNewConversationButtonClicked.emit()
   }
@@ -2064,17 +2121,12 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   // ========= begin:: DESTROY ALL SUBSCRIPTIONS ============//
-  /**
-   * elimino tutte le sottoscrizioni
-   */
-  // tslint:disable-next-line:use-life-cycle-interface
+  /** elimino tutte le sottoscrizioni */
   ngOnDestroy() {
     this.logger.debug('[CONV-COMP] ngOnDestroy ------------------> this.subscriptions', this.subscriptions);
     //this.storageService.removeItem('activeConversation');
-    
     this.unsubscribe();
   }
-
 
   /** */
   unsubscribe() {
@@ -2143,47 +2195,11 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnChanges {
   //   }
   // }
 
-  /** */
-  returnOnAttachmentButtonClicked(event: any) {
-    this.logger.debug('[CONV-COMP] eventbutton', event)
-    if (!event || !event.target.type) {
-      return;
-    }
-    switch (event.target.type) {
-      case 'url':
-        try {
-          this.openLink(event.target.button);
-        } catch (err) {
-          this.logger.error('[CONV-COMP] url > Error :' + err);
-        }
-        return;
-      case 'action':
-        try {
-          this.actionButton(event.target.button);
-        } catch (err) {
-          this.logger.error('[CONV-COMP] action > Error :' + err);
-        }
-        return false;
-      case 'text':
-        try{
-          const text = event.target.button.value
-          const metadata = { 'button': true };
-          this.conversationFooter.sendMessage(text, TYPE_MSG_TEXT, metadata);
-        }catch(err){
-          this.logger.error('[CONV-COMP] text > Error :' + err);
-        }
-      default: return;
-    }
-  }
+  
 
-  onOpenExternalFrame(event){
-    window.open(event.link, '_blank');
-  }
+  
 
-  onCloseInternalFrame(event){
-    this.isButtonUrl = false
-    this.buttonClicked = null;
-  }
+  
 
   /** */
   private openLink(event: any) {

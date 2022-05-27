@@ -38,7 +38,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   @Output() onBeforeMessageSent = new EventEmitter();
   @Output() onAfterSendMessage = new EventEmitter();
   @Output() onChangeTextArea = new EventEmitter<any>();
-  @Output() onAttachmentButtonClicked = new EventEmitter<any>();
+  @Output() onAttachmentFileButtonClicked = new EventEmitter<any>();
   @Output() onNewConversationButtonClicked = new EventEmitter();
 
   @ViewChild('chat21_file') public chat21_file: ElementRef;
@@ -184,7 +184,7 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
             // this.addLocalMessageImage(metadata);
             // 2 - carico immagine
             const file = this.selectedFiles.item(0);
-            this.onAttachmentButtonClicked.emit({attachments: [{metadata, file}], message: this.textInputTextArea}) //GABBBBBBBB
+            this.onAttachmentFileButtonClicked.emit({attachments: [{metadata, file}], message: this.textInputTextArea}) //GABBBBBBBB
             this.restoreTextArea();
             this.chat21_file.nativeElement.value = ''; //BUG-FIXED: allow you to re-load the same previous file
             // this.uploadSingle(metadata, file); 

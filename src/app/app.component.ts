@@ -1,35 +1,46 @@
-import { Globals } from './utils/globals';
+/** ANGULAR MODULES */
 import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs/internal/Subscription';
+import * as moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
+//COMPONENTS
+import { EyeeyeCatcherCardComponent } from './component/eyeeye-catcher-card/eyeeye-catcher-card.component';
+//MODELS
+import { UserModel } from 'src/chat21-core/models/user';
+import { ConversationModel } from 'src/chat21-core/models/conversation';
+// SERVICES
+/** LOGGER SERVICES */
 import { LoggerService } from 'src/chat21-core/providers/abstract/logger.service';
 import { LoggerInstance } from 'src/chat21-core/providers/logger/loggerInstance';
+/** TILEDESK SERVICES */
 import { TiledeskAuthService } from 'src/chat21-core/providers/tiledesk/tiledesk-auth.service';
+import { TiledeskRequestsService } from 'src/chat21-core/providers/tiledesk/tiledesk-requests.service';
+/** CONVERSATIONS - MESSAGE SERVICES */
 import { MessagingAuthService } from 'src/chat21-core/providers/abstract/messagingAuth.service';
-import { TranslatorService } from './providers/translator.service';
-import * as moment from 'moment';
-import { AppConfigService } from './providers/app-config.service';
-import { GlobalSettingsService } from './providers/global-settings.service';
-import { Subscription } from 'rxjs/internal/Subscription';
-import { AppStorageService } from 'src/chat21-core/providers/abstract/app-storage.service';
-import { environment } from 'src/environments/environment';
 import { ChatManager } from 'src/chat21-core/providers/chat-manager';
 import { UploadService } from 'src/chat21-core/providers/abstract/upload.service';
-import { UserModel } from 'src/chat21-core/models/user';
 import { Triggerhandler } from 'src/chat21-core/utils/triggerHandler';
-import { ConversationModel } from 'src/chat21-core/models/conversation';
-import { AUTH_STATE_OFFLINE, AUTH_STATE_ONLINE, TYPE_MSG_FILE, TYPE_MSG_IMAGE, URL_SOUND_LIST_CONVERSATION } from 'src/chat21-core/utils/constants';
+import { AppStorageService } from 'src/chat21-core/providers/abstract/app-storage.service';
+import { ConversationHandlerBuilderService } from 'src/chat21-core/providers/abstract/conversation-handler-builder.service';
+import { ArchivedConversationsHandlerService } from 'src/chat21-core/providers/abstract/archivedconversations-handler.service';
+import { ConversationsHandlerService } from 'src/chat21-core/providers/abstract/conversations-handler.service';
+import { ConversationHandlerService } from 'src/chat21-core/providers/abstract/conversation-handler.service';
+import { ImageRepoService } from 'src/chat21-core/providers/abstract/image-repo.service';
 import { TypingService } from 'src/chat21-core/providers/abstract/typing.service';
 import { PresenceService } from 'src/chat21-core/providers/abstract/presence.service';
 import { CustomTranslateService } from 'src/chat21-core/providers/custom-translate.service';
-import { ConversationsHandlerService } from 'src/chat21-core/providers/abstract/conversations-handler.service';
-import { ArchivedConversationsHandlerService } from 'src/chat21-core/providers/abstract/archivedconversations-handler.service';
-import { ConversationHandlerBuilderService } from 'src/chat21-core/providers/abstract/conversation-handler-builder.service';
-import { UID_SUPPORT_GROUP_MESSAGES } from './utils/constants';
-import { v4 as uuidv4 } from 'uuid';
-import { supports_html5_storage } from 'src/chat21-core/utils/utils';
+/** OTHERS */
+import { AppConfigService } from './providers/app-config.service';
+import { GlobalSettingsService } from './providers/global-settings.service';
+import { TranslatorService } from './providers/translator.service';
 import { SettingsSaverService } from './providers/settings-saver.service';
-import { ConversationHandlerService } from 'src/chat21-core/providers/abstract/conversation-handler.service';
-import { ImageRepoService } from 'src/chat21-core/providers/abstract/image-repo.service';
-import { EyeeyeCatcherCardComponent } from './component/eyeeye-catcher-card/eyeeye-catcher-card.component';
+// UTILS
+import { Globals } from './utils/globals';
+import { UID_SUPPORT_GROUP_MESSAGES } from './utils/constants';
+import { supports_html5_storage } from 'src/chat21-core/utils/utils';
+import { AUTH_STATE_OFFLINE, AUTH_STATE_ONLINE, TYPE_MSG_FILE, TYPE_MSG_IMAGE, URL_SOUND_LIST_CONVERSATION } from 'src/chat21-core/utils/constants';
+import { isInfo } from 'src/chat21-core/utils/utils-message';
 
 interface MessageObj {
   tenant?: string;
@@ -54,14 +65,6 @@ interface MessageObj {
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   
-  title = 'widget';
-
-  baseLocation=""
-  
-  message = {
-    senderID: "eee",
-    sender_fullname: "gab"
-  }
 
   // ========= begin:: sottoscrizioni ======= //
   subscriptions: Subscription[] = []; /** */
@@ -84,13 +87,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   // isOpenPrechatForm = false;          /** check open/close modal prechatform if g.preChatForm is true  */
   isOpenStartRating = false;          /** check open/close modal start rating chat if g.isStartRating is true  */
   // isWidgetActive: boolean;            /** var bindata sullo stato conv aperta/chiusa !!!! da rivedere*/
-  // isModalLeaveChatActive = false;     /** ???? */
   isConversationArchived: boolean = false;
   isInitialized = false;              /** if true show button */
   // ========= end:: widget state parameter ======= //
 
   listConversations: Array<ConversationModel>;
   archivedConversations: Array<ConversationModel>;
+  lastConversation: ConversationModel;
   
   @ViewChild(EyeeyeCatcherCardComponent, { static: false }) eyeeyeCatcherCardComponent: EyeeyeCatcherCardComponent
   styleMapConversation: Map<string, string> = new Map();
@@ -109,6 +112,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private translatorService: TranslatorService,
     private translateService: CustomTranslateService,
     public chatManager: ChatManager,
+    private tiledeskRequestsService: TiledeskRequestsService,
     public tiledeskAuthService: TiledeskAuthService,
     public messagingAuthService: MessagingAuthService,
     public conversationsHandlerService: ConversationsHandlerService,
@@ -127,8 +131,99 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.logger.info('[APP-CONF]---------------- ngAfterViewInit: APP.COMPONENT ---------------- ')
+    this.ngZone.run(() => {
+        const that = this;
+        const subChangedConversation = this.conversationsHandlerService.conversationChanged.subscribe((conversation) => {
+            // that.ngZone.run(() => {
+            if (conversation) {
+                this.onImageLoaded(conversation)
+                this.onConversationLoaded(conversation)
+
+                if(conversation.sender !== this.g.senderId && !isInfo(conversation)){
+                    that.manageTabNotification();
+                }
+
+                if (that.g.isOpen === true) {
+                    that.g.setParameter('displayEyeCatcherCard', 'none');
+
+                    this.logger.debug('[APP-COMP] obsChangeConversation ::: ', conversation);
+                    if (conversation.attributes && conversation.attributes['subtype'] === 'info') {
+                        return;
+                    }
+                    if (conversation.is_new && !this.isOpenConversation) {
+                        // this.soundMessage();
+                    }
+
+                } else {
+                    // if(conversation.is_new && isJustRecived(this.g.startedAt.getTime(), conversation.timestamp)){
+                    //widget closed
+                    that.lastConversation = conversation;
+                    that.g.isOpenNewMessage = true;
+                    that.logger.debug('[APP-COMP] lastconversationnn', that.lastConversation)
+
+                    let badgeNewConverstionNumber = that.conversationsHandlerService.countIsNew()
+                    that.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
+                    // }
+                }
+
+                that.triggerOnConversationUpdated(conversation);
+            } else {
+                this.logger.debug('[APP-COMP] oBSconversationChanged null: errorrr')
+                return;
+            }
+            
+            // });
+        });
+        this.subscriptions.push(subChangedConversation);
+
+        const subAddedConversation = this.conversationsHandlerService.conversationAdded.subscribe((conversation) => {
+            // that.ngZone.run(() => {
+            if (that.g.isOpen === true && conversation) {
+                that.g.setParameter('displayEyeCatcherCard', 'none');
+                that.triggerOnConversationUpdated(conversation);
+                that.logger.debug('[APP-COMP] obsAddedConversation ::: ', conversation);
+                if (conversation && conversation.attributes && conversation.attributes['subtype'] === 'info') {
+                    return;
+                }
+                if (conversation.is_new) {
+                    that.manageTabNotification()
+                    // this.soundMessage(); 
+                }
+                if(this.g.isOpen === false){
+                    that.lastConversation = conversation;
+                    that.g.isOpenNewMessage = true;
+                }
+            } else {
+                //widget closed
+
+                let badgeNewConverstionNumber = that.conversationsHandlerService.countIsNew()
+                that.g.setParameter('conversationsBadge', badgeNewConverstionNumber);
+            }
+            // that.manageTabNotification()
+            // });
+            if(conversation){
+                this.onImageLoaded(conversation)
+                this.onConversationLoaded(conversation)
+            }
+            
+        });
+        this.subscriptions.push(subAddedConversation);
+
+        const subArchivedConversations = this.archivedConversationsService.archivedConversationAdded.subscribe((conversation) => {
+            // that.ngZone.run(() => {
+            if (conversation) {
+                that.triggerOnConversationUpdated(conversation);
+                this.onImageLoaded(conversation)
+                this.onConversationLoaded(conversation)
+            }
+            // });
+        });
+        this.subscriptions.push(subArchivedConversations);
+
+    });
     this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
     this.tiledeskAuthService.initialize(this.appConfigService.getConfig().apiUrl)
+    this.tiledeskRequestsService.initialize(this.appConfigService.getConfig().apiUrl, this.g.projectid)
     this.messagingAuthService.initialize();
     this.chatManager.initialize();
     this.uploadService.initialize();
@@ -137,50 +232,50 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private initWidgetParamiters(){
     const that = this;
     const obsSettingsService = this.globalSettingsService.obsSettingsService.subscribe((resp) => {
-      if(resp){
+        if(resp){
 
-        // /** INIT  */
-        this.logger.setLoggerConfig(this.g.isLogEnabled, this.g.logLevel)
-        this.tabTitle = this.g.windowContext.window.document.title
-        this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
-        this.logger.debug('[APP-COMP] controllo se è stato passato un token: ', this.g.jwt);
-        /**CHECK IF JWT IS IN URL PARAMETERS */
-        if (this.g.jwt) {
-          // logging in with custom token from url
-          // add JWY token to localstorage and authenticate with it           this.logger.debug('[APP-COMP] token from url. isShown:', this.g.isShown, 'autostart:', this.g.autoStart)
-          this.logger.debug('[APP-COMP]  ----------------  logging in with custom token from url ---------------- ');
-          //   this.g.autoStart = false;
-          const storedTiledeskToken = this.appStorageService.getItem('tiledeskToken')
-          storedTiledeskToken === this.g.jwt? null: 
-          this.appStorageService.setItem('tiledeskToken', this.g.jwt)
-          this.g.tiledeskToken = this.g.jwt;
-          // this.signInWithCustomToken(this.g.jwt) // moved to authenticate() in else(tiledeskToken)
-      }
+            // /** INIT  */
+            this.logger.setLoggerConfig(this.g.isLogEnabled, this.g.logLevel)
+            this.tabTitle = this.g.windowContext.window.document.title
+            this.appStorageService.initialize(environment.storage_prefix, this.g.persistence, this.g.projectid)
+            this.logger.debug('[APP-COMP] controllo se è stato passato un token: ', this.g.jwt);
+            /**CHECK IF JWT IS IN URL PARAMETERS */
+            if (this.g.jwt) {
+                // logging in with custom token from url
+                // add JWY token to localstorage and authenticate with it           this.logger.debug('[APP-COMP] token from url. isShown:', this.g.isShown, 'autostart:', this.g.autoStart)
+                this.logger.debug('[APP-COMP]  ----------------  logging in with custom token from url ---------------- ');
+                //   this.g.autoStart = false;
+                const storedTiledeskToken = this.appStorageService.getItem('tiledeskToken')
+                storedTiledeskToken === this.g.jwt? null: 
+                this.appStorageService.setItem('tiledeskToken', this.g.jwt)
+                this.g.tiledeskToken = this.g.jwt;
+                // this.signInWithCustomToken(this.g.jwt) // moved to authenticate() in else(tiledeskToken)
+            }
 
-      /** INIT LABELS TRANSLATIONS */
-      this.translatorService.initI18n().then((result) => {
-        this.logger.debug('[APP-COMP] »»»» APP-COMPONENT.TS initI18n result', result);
-        const browserLang = this.translatorService.getLanguage();
-        moment.locale(browserLang)
-        this.translatorService.translate(this.g);
-      }).then(() => {
-        /** INIT  */
-        that.initAll();
-        /** TRIGGER ONBEFORE INIT */
-        that.triggerOnBeforeInit();
-        /** AUTH */
-        that.setAuthSubscription();
-    })
+            /** INIT LABELS TRANSLATIONS */
+            this.translatorService.initI18n().then((result) => {
+                this.logger.debug('[APP-COMP] »»»» APP-COMPONENT.TS initI18n result', result);
+                const browserLang = this.translatorService.getLanguage();
+                moment.locale(browserLang)
+                this.translatorService.translate(this.g);
+            }).then(() => {
+                /** INIT  */
+                that.initAll();
+                /** TRIGGER ONBEFORE INIT */
+                that.triggerOnBeforeInit();
+                /** AUTH */
+                that.setAuthSubscription();
+            })
       
-      }
+        }
     });
     this.subscriptions.push(obsSettingsService);
     this.globalSettingsService.initWidgetParamiters(this.g, this.el);
 
-     // SET AUDIO
-     this.audio = new Audio();
-     this.audio.src = this.g.baseLocation + URL_SOUND_LIST_CONVERSATION;
-     this.audio.load();
+    // SET AUDIO
+    this.audio = new Audio();
+    this.audio.src = this.g.baseLocation + URL_SOUND_LIST_CONVERSATION;
+    this.audio.load();
   }
 
   private initAll() {
