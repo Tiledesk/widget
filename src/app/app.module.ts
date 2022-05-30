@@ -126,9 +126,6 @@ import { Triggerhandler } from 'src/chat21-core/utils/triggerHandler';
 import { WaitingService } from './providers/waiting.service';
 import { StarRatingWidgetService } from './providers/star-rating-widget.service';
 
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatButtonModule } from '@angular/material/button'
-
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -287,7 +284,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
+    // AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -300,9 +297,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
       //   useFactory: (createTranslateLoader),
       //   deps: [HttpClient]
       // }
-    }),
-    MatTooltipModule,
-    MatButtonModule,
+    })
   ],
   providers: [
     AppConfigService,
