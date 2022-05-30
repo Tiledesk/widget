@@ -6,7 +6,6 @@ import { Globals } from '../../utils/globals';
 
 import { LastMessageComponent } from './last-message.component';
 import { HtmlEntitiesEncodePipe } from '../../directives/html-entities-encode.pipe';
-import { MomentModule } from 'angular2-moment';
 
 describe('LastMessageComponent', () => {
   let component: LastMessageComponent;
@@ -20,7 +19,6 @@ describe('LastMessageComponent', () => {
         HtmlEntitiesEncodePipe
       ],
       imports: [  
-        MomentModule
       ],
       providers: [
         Globals,

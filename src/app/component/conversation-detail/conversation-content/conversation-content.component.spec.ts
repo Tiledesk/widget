@@ -1,22 +1,9 @@
-import { MessageModel } from './../../../../chat21-core/models/message';
 import { TooltipModule } from 'ng2-tooltip-directive';
-import { ImageComponent } from './../../message/image/image.component';
-import { MessageAttachmentComponent } from './../../message-attachment/message-attachment.component';
-import { InfoMessageComponent } from './../../message/info-message/info-message.component';
-import { AvatarComponent } from './../../message/avatar/avatar.component';
-import { ReturnReceiptComponent } from './../../message/return-receipt/return-receipt.component';
-import { BubbleMessageComponent } from './../../message/bubble-message/bubble-message.component';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConversationContentComponent } from './conversation-content.component';
-import { MomentModule } from 'angular2-moment';
-import { FrameComponent } from '../../message/frame/frame.component';
-import { TextComponent } from '../../message/text/text.component';
 import { MarkedPipe } from '../../../directives/marked.pipe';
 import { HtmlEntitiesEncodePipe } from '../../../directives/html-entities-encode.pipe';
-import { TextButtonComponent } from '../../message/buttons/text-button/text-button.component';
-import { LinkButtonComponent } from '../../message/buttons/link-button/link-button.component';
-import { ActionButtonComponent } from '../../message/buttons/action-button/action-button.component';
 import { UploadService } from '../../../../chat21-core/providers/abstract/upload.service';
 import { CustomLogger } from '../../../../chat21-core/providers/logger/customLogger';
 import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
@@ -51,7 +38,6 @@ describe('ConversationContentComponent', () => {
         HtmlEntitiesEncodePipe,
       ],
       imports: [
-        MomentModule,
         TooltipModule
       ],
       providers: [ 
