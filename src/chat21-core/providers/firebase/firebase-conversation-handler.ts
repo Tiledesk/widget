@@ -300,8 +300,6 @@ export class FirebaseConversationHandler extends ConversationHandlerService {
             this.logger.error('[FIREBASEConversationHandlerSERVICE] CHANGED::message with uid: ', msg.uid, 'is not valid')
         }
 
-        
-        
     }
 
     /** */
