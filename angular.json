@@ -42,6 +42,7 @@
               "src/environments/real_data/widget-config-native-mqtt.json"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
               "src/app/sass/styles.scss"
             ],
@@ -82,6 +83,30 @@
                 }
               ]
             },
+            "pre": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.pre.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
             "development": {}
           },
           "defaultConfiguration": "production"
@@ -93,6 +118,9 @@
           "configurations": {
             "production": {
               "browserTarget": "widget:build:production"
+            },
+            "pre": {
+              "browserTarget": "widget:build:pre"
             },
             "development": {
               "browserTarget": "widget:build:development"
@@ -118,6 +146,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -144,6 +173,9 @@
           "configurations": {
             "production": {
               "devServerTarget": "widget:serve:production"
+            },
+            "pre": {
+              "devServerTarget": "widget:serve:pre"
             },
             "development": {
               "devServerTarget": "widget:serve:development"
