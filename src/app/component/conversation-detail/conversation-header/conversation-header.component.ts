@@ -68,7 +68,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges){
     if(changes['idConversation'] && changes['idConversation'].currentValue !== undefined){
       this.logger.debug('[CONV-HEADER] onChanges -- Conversation-header.component-> start initializeTyping()', this.idConversation)
-      this.initializeTyping();
+      // this.initializeTyping();
     }
   }
 
@@ -98,12 +98,11 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   }
 
 
-  initializeTyping() {
-    this.logger.debug('[CONV-HEADER] membersconversation', this.membersConversation)
-    //this.setSubscriptions();
-    // this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
+  // initializeTyping() {
+  //   this.logger.debug('[CONV-HEADER] membersconversation', this.membersConversation)
+  //   this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
     
-  }
+  // }
 
   // /** */
   private setSubscriptions() {
