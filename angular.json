@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
+  "defaultProject": "widget",
   "newProjectRoot": "projects",
   "projects": {
     "widget": {
@@ -51,6 +52,10 @@
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
+            "allowedCommonJsDependencies": [
+              "rxjs-compat",
+              "moment"
+            ],
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true
@@ -67,18 +72,42 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "4mb",
                   "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb"
+                }
+              ]
+            },
+            "pre": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.pre.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
                 }
               ]
             },
@@ -93,6 +122,9 @@
           "configurations": {
             "production": {
               "browserTarget": "widget:build:production"
+            },
+            "pre": {
+              "browserTarget": "widget:build:pre"
             },
             "development": {
               "browserTarget": "widget:build:development"
@@ -118,6 +150,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -145,6 +178,9 @@
             "production": {
               "devServerTarget": "widget:serve:production"
             },
+            "pre": {
+              "devServerTarget": "widget:serve:pre"
+            },
             "development": {
               "devServerTarget": "widget:serve:development"
             }
@@ -152,6 +188,5 @@
           "defaultConfiguration": "development"
         }
       }
-    }},
-  "defaultProject": "widget"
+    }}
 }

@@ -173,6 +173,7 @@ export class Globals {
    isLogEnabled: boolean;
    openExternalLinkButton: boolean;
    hideHeaderConversationOptionsMenu: boolean;
+   hideCloseConversationOptionMenu: boolean;
    hideSettings: boolean;
    filterByRequester: boolean;
    persistence;
@@ -333,8 +334,10 @@ export class Globals {
     this.isLogEnabled = false;
     // this.parameters['isLogEnabled'] = false;
     this.openExternalLinkButton = true;
-    /** enable to open URL in  self action link button in external page from widget */
+    /** enable to hide/show upper-right header conversation options menu */
     this.hideHeaderConversationOptionsMenu = false;
+    /** enable to close a conversation from upper-right header menu  */
+    this.hideCloseConversationOptionMenu = false;
     /** enable to hide/show options menu in conversation detail header */
     this.hideSettings = false;
     /** enable to hide/show options menu in home component */
@@ -414,7 +417,6 @@ export class Globals {
     // this.parameters.push({'isLogged': false});  /** detect is logged */
 
     this.BUILD_VERSION = 'v.' + environment.version;
-    console.log('envvvvv', environment)
     // this.parameters['BUILD_VERSION'] = 'v.' + environment.version;
     // this.parameters.push({'BUILD_VERSION': 'v.' + environment.version});
 

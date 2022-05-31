@@ -199,28 +199,23 @@
                       </div> -->
 
                       <!-- FILE PENDING UPLOAD -->
+                      <!--  -->
                       <div *ngIf="showUploadProgress" class="msg_container base_sent" >
                         <!-- class="slide-in-right" -->
                         <div class="chat21-spinner active" id="chat21-spinner" style="margin: 0px 6px 0px;">
                           <div class="chat21-bounce1" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
-                          <div class="chat21-bounce2" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
-                          <div class="chat21-bounce3" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
+                          <div class="chat21-bounce2" [ngStyle]="{'background-color': stylesMap.get('themeColor'), 'opacity': 0.4}"></div>
+                          <div class="chat21-bounce3" [ngStyle]="{'background-color': stylesMap.get('themeColor'), 'opacity': 0.6}"></div>
                           <!-- <span [ngStyle]="{'color': stylesMap.get('themeColor')}">{{translationMap.get('LABEL_LOADING')}}</span> -->
                         </div>
 
-                        <!-- <div class="messages msg_sent ">
-                          <div class="spinner">
-                            <div class="chat21-bounce1" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
-                            <div class="chat21-bounce2" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
-                            <div class="chat21-bounce3" [ngStyle]="{'background-color': stylesMap.get('themeColor')}"></div>
-                          </div>
-                        </div> -->
+                        
                       </div>
 
-                      <!-- <div *ngIf="isTypings" class="msg_container base_receive">
 
-                        <chat-avatar-image *ngIf="idUserTypingNow && !isSameSender(idUserTypingNow, i)" 
-                          [ngClass]="{'slide-in-left': !isFirstMessage(idUserTypingNow, i)}"    
+                      <div *ngIf="isTypings" class="msg_container base_receive">
+                        <!-- !isSameSender(idUserTypingNow, i) -->
+                        <chat-avatar-image *ngIf="idUserTypingNow " class="slide-in-left"  
                           [senderID]="idUserTypingNow"
                           [senderFullname]="nameUserTypingNow"
                           [baseLocation]="baseLocation">
@@ -233,7 +228,7 @@
                           [idUserTypingNow]="idUserTypingNow"
                           [nameUserTypingNow]="nameUserTypingNow">
                         </user-typing>
-                      </div> -->
+                      </div>
                       
                   </div>
               </div>

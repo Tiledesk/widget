@@ -1,11 +1,10 @@
-import { MIN_WIDTH_IMAGES } from './../../../utils/constants';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MessageModel } from '../../../../chat21-core/models/message';
-import { LoggerService } from '../../../../chat21-core/providers/abstract/logger.service';
-import { LoggerInstance } from '../../../../chat21-core/providers/logger/loggerInstance';
-import { isFile, isFrame, isImage } from '../../../../chat21-core/utils/utils-message';
-import { MAX_WIDTH_IMAGES} from '../../../utils/constants';
+import { MessageModel } from 'src/chat21-core/models/message';
+import { LoggerService } from 'src/chat21-core/providers/abstract/logger.service';
+import { LoggerInstance } from 'src/chat21-core/providers/logger/loggerInstance';
+import { isFile, isFrame, isImage } from 'src/chat21-core/utils/utils-message';
+import { MAX_WIDTH_IMAGES, MIN_WIDTH_IMAGES} from '../../../utils/constants';
 
 @Component({
   selector: 'chat-bubble-message',

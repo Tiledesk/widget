@@ -1,35 +1,55 @@
-import { MomentModule } from 'ngx-moment';
-import { MessageAttachmentComponent } from './component/message-attachment/message-attachment.component';
-import { UserTypingComponent } from './../chat21-core/utils/user-typing/user-typing.component';
-import { StarRatingWidgetComponent } from './component/star-rating-widget/star-rating-widget.component';
-import { TextButtonComponent } from './component/message/buttons/text-button/text-button.component';
-import { LinkButtonComponent } from './component/message/buttons/link-button/link-button.component';
-import { ActionButtonComponent } from './component/message/buttons/action-button/action-button.component';
-import { TextComponent } from './component/message/text/text.component';
-import { ReturnReceiptComponent } from './component/message/return-receipt/return-receipt.component';
-import { InfoMessageComponent } from './component/message/info-message/info-message.component';
-import { ImageComponent } from './component/message/image/image.component';
-import { HtmlComponent } from './component/message/html/html.component';
-import { FrameComponent } from './component/message/frame/frame.component';
-import { AvatarComponent } from './component/message/avatar/avatar.component';
+
+// ************** COMPONENTS ************** //
+import { AppComponent } from './app.component';
+/** HOME COMPONENTS */
+import { HomeComponent } from './component/home/home.component';
+import { HomeConversationsComponent } from './component/home-conversations/home-conversations.component';
+import { ListConversationsComponent } from './component/list-conversations/list-conversations.component';
+import { ListAllConversationsComponent } from './component/list-all-conversations/list-all-conversations.component';
+/** CONVERSATION COMPONENTS */
+import { ConversationComponent } from './component/conversation-detail/conversation/conversation.component';
+import { ConversationHeaderComponent } from './component/conversation-detail/conversation-header/conversation-header.component';
+import { ConversationContentComponent } from './component/conversation-detail/conversation-content/conversation-content.component';
+import { ConversationFooterComponent } from './component/conversation-detail/conversation-footer/conversation-footer.component';
 import { ConversationInternalFrameComponent } from './component/conversation-detail/conversation-internal-frame/conversation-internal-frame.component';
 import { ConversationPreviewComponent } from './component/conversation-detail/conversation-preview/conversation-preview.component';
+/** CONVERSATION-DETAIL COMPONENTS */
 import { BubbleMessageComponent } from './component/message/bubble-message/bubble-message.component';
-import { ConversationFooterComponent } from './component/conversation-detail/conversation-footer/conversation-footer.component';
-import { ConversationContentComponent } from './component/conversation-detail/conversation-content/conversation-content.component';
-import { ConversationHeaderComponent } from './component/conversation-detail/conversation-header/conversation-header.component';
-import { ConversationComponent } from './component/conversation-detail/conversation/conversation.component';
+import { AvatarComponent } from './component/message/avatar/avatar.component';
+import { TextComponent } from './component/message/text/text.component';
+import { ImageComponent } from './component/message/image/image.component';
+import { InfoMessageComponent } from './component/message/info-message/info-message.component';
+import { HtmlComponent } from './component/message/html/html.component';
+import { FrameComponent } from './component/message/frame/frame.component';
+import { UserTypingComponent } from './../chat21-core/utils/user-typing/user-typing.component';
+/** MESSAGE ATTACHMENTS COMPONENTS */
+import { MessageAttachmentComponent } from './component/message-attachment/message-attachment.component';
+import { ActionButtonComponent } from './component/message/buttons/action-button/action-button.component';
+import { LinkButtonComponent } from './component/message/buttons/link-button/link-button.component';
+import { TextButtonComponent } from './component/message/buttons/text-button/text-button.component';
+import { ReturnReceiptComponent } from './component/message/return-receipt/return-receipt.component';
+/** FORM COMPONENTS */
+import { PrechatFormComponent } from './component/form/prechat-form/prechat-form.component';
+import { FormBuilderComponent } from './component/form/form-builder/form-builder.component';
 import { FormSelectComponent } from './component/form/inputs/form-select/form-select.component';
 import { FormRadioButtonComponent } from './component/form/inputs/form-radio-button/form-radio-button.component';
-import { PrechatFormComponent } from './component/form/prechat-form/prechat-form.component';
+import { FormTextComponent } from './component/form/inputs/form-text/form-text.component';
+import { FormLabelComponent } from './component/form/inputs/form-label/form-label.component';
+import { FormCheckboxComponent } from './component/form/inputs/form-checkbox/form-checkbox.component';
+import { FormTextareaComponent } from './component/form/inputs/form-textarea/form-textarea.component';
+/** OTHER COMPONENTS */
+import { LastMessageComponent } from './component/last-message/last-message.component';
+import { StarRatingWidgetComponent } from './component/star-rating-widget/star-rating-widget.component';
+import { LauncherButtonComponent } from './component/launcher-button/launcher-button.component';
+import { EyeeyeCatcherCardComponent } from './component/eyeeye-catcher-card/eyeeye-catcher-card.component';
 import { SelectionDepartmentComponent } from './component/selection-department/selection-department.component';
-import { DepartmentModel } from 'src/models/department';
 import { MenuOptionsComponent } from './component/menu-options/menu-options.component';
-import { ListAllConversationsComponent } from './component/list-all-conversations/list-all-conversations.component';
+
 //ANGULAR MODULES
 import { AppRoutingModule } from './app-routing.module';
 import { AppConfigService } from './providers/app-config.service';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -37,19 +57,21 @@ import { environment } from 'src/environments/environment';
 
 //THIRD-PART MODULES
 import { TranslateModule } from '@ngx-translate/core';
+import { MomentModule } from 'ngx-moment';
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 //DIRECTIVES
 import { HtmlEntitiesEncodePipe } from './directives/html-entities-encode.pipe';
 import { MarkedPipe } from './directives/marked.pipe';
 import { SafeHtmlPipe } from './directives/safe-html.pipe';
 
-//COMPONENTS
-import { AppComponent } from './app.component';
-
-
 //LOGGER SERVICES
 import { LoggerInstance } from 'src/chat21-core/providers/logger/loggerInstance';
 import { CustomLogger } from 'src/chat21-core/providers/logger/customLogger';
+
+// TRANSLATOR SERVICE
+import { TranslatorService } from './providers/translator.service';
+import { CustomTranslateService } from 'src/chat21-core/providers/custom-translate.service';
 
 //ABSTRACT SERVICES
 import { AppStorageService } from 'src/chat21-core/providers/abstract/app-storage.service';
@@ -87,43 +109,27 @@ import { MQTTPresenceService } from 'src/chat21-core/providers/mqtt/mqtt-presenc
 
 // NATIVE TILEDESK SERVICES
 import { TiledeskAuthService } from './../chat21-core/providers/tiledesk/tiledesk-auth.service';
+import { TiledeskRequestsService } from 'src/chat21-core/providers/tiledesk/tiledesk-requests.service';
 import { NativeImageRepoService } from 'src/chat21-core/providers/native/native-image-repo';
 import { NativeUploadService } from 'src/chat21-core/providers/native/native-upload-service';
 
 //CONSTANTS
 import { CHAT_ENGINE_MQTT, UPLOAD_ENGINE_NATIVE } from 'src/chat21-core/utils/constants';
 
+//STORAGE
 import { LocalSessionStorage } from 'src/chat21-core/providers/localSessionStorage';
+import { SettingsSaverService } from './providers/settings-saver.service';
 
-
-import { TranslatorService } from './providers/translator.service';
 import { Globals } from './utils/globals';
 import { GlobalSettingsService } from './providers/global-settings.service';
 import { Triggerhandler } from 'src/chat21-core/utils/triggerHandler';
-import { CustomTranslateService } from 'src/chat21-core/providers/custom-translate.service';
-import { SettingsSaverService } from './providers/settings-saver.service';
-import { LauncherButtonComponent } from './component/launcher-button/launcher-button.component';
-import { EyeeyeCatcherCardComponent } from './component/eyeeye-catcher-card/eyeeye-catcher-card.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WaitingService } from './providers/waiting.service';
-import { HomeConversationsComponent } from './component/home-conversations/home-conversations.component';
-import { HomeComponent } from './component/home/home.component';
-import { ListConversationsComponent } from './component/list-conversations/list-conversations.component';
-import { FormBuilderComponent } from './component/form/form-builder/form-builder.component';
-import { FormTextComponent } from './component/form/inputs/form-text/form-text.component';
-import { FormLabelComponent } from './component/form/inputs/form-label/form-label.component';
-import { FormCheckboxComponent } from './component/form/inputs/form-checkbox/form-checkbox.component';
-import { FormTextareaComponent } from './component/form/inputs/form-textarea/form-textarea.component';
 import { StarRatingWidgetService } from './providers/star-rating-widget.service';
-import { TooltipModule } from 'ng2-tooltip-directive';
-
-
 
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
     let customLogger = new CustomLogger()
-    console.log('appInitializer...')
     LoggerInstance.setInstance(customLogger)
     if (environment.remoteConfig) {
       return appConfig.loadAppConfig();
@@ -241,6 +247,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     SelectionDepartmentComponent,
     StarRatingWidgetComponent,
     MessageAttachmentComponent,
+    LastMessageComponent,
     /**FORM COMPONENTS */
     PrechatFormComponent,
     FormBuilderComponent,
@@ -277,7 +284,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
+    // AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -290,7 +297,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
       //   useFactory: (createTranslateLoader),
       //   deps: [HttpClient]
       // }
-    }),
+    })
   ],
   providers: [
     AppConfigService,
@@ -355,6 +362,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
       deps: [HttpClient, AppConfigService, AppStorageService ]
     },
     TiledeskAuthService,
+    TiledeskRequestsService,
     TranslatorService,
     CustomTranslateService,
     Triggerhandler,

@@ -1,6 +1,13 @@
 {
-  "name": "widget",
-  "version": "0.0.0",
+  "name": "@chat21/chat21-web-widget",
+  "author": "Tiledesk SRL",
+  "version": "5.0.24-rc.6",
+  "license": "AGPL-3.0",
+  "homepage": "https://www.tiledesk.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tiledesk/chat21-web-widget"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -9,9 +16,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
-    "@angular/animations": "~12.2.16",
+    "@angular/animations": "^12.2.16",
+    "@angular/cdk": "^12.2.13",
     "@angular/common": "^12.2.16",
     "@angular/compiler": "~12.2.16",
     "@angular/core": "~12.2.16",
@@ -23,7 +31,7 @@
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
     "accept-language-parser": "^1.5.0",
-    "angular2-moment": "^1.9.0",
+    "file-saver": "^2.0.5",
     "firebase": "^8.6.7",
     "humanize-duration-ts": "^2.1.1",
     "marked": "^4.0.16",

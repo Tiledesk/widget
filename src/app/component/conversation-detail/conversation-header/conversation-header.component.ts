@@ -18,6 +18,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   @Input() soundEnabled: boolean;
   @Input() isMenuShow: boolean;
   @Input() isTrascriptDownloadEnabled: boolean;
+  @Input() hideCloseConversationOptionMenu: boolean;
   @Input() hideHeaderCloseButton: boolean;
   @Input() hideHeaderConversationOptionsMenu: boolean;
   @Input() windowContext;
@@ -27,6 +28,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   @Output() onBack = new EventEmitter();
   @Output() onCloseWidget = new EventEmitter();
   @Output() onSoundChange = new EventEmitter();
+  @Output() onCloseChat =  new EventEmitter();
   @Output() onWidgetHeightChange = new EventEmitter<string>();
   @Output() onMenuOptionShow = new EventEmitter();
   // ========= end:: Input/Output values
@@ -66,7 +68,7 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges){
     if(changes['idConversation'] && changes['idConversation'].currentValue !== undefined){
       this.logger.debug('[CONV-HEADER] onChanges -- Conversation-header.component-> start initializeTyping()', this.idConversation)
-      this.initializeTyping();
+      // this.initializeTyping();
     }
   }
 
@@ -96,12 +98,11 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
   }
 
 
-  initializeTyping() {
-    this.logger.debug('[CONV-HEADER] membersconversation', this.membersConversation)
-    //this.setSubscriptions();
-    // this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
+  // initializeTyping() {
+  //   this.logger.debug('[CONV-HEADER] membersconversation', this.membersConversation)
+  //   this.typingService.isTyping(this.idConversation, this.senderId, this.isDirect);
     
-  }
+  // }
 
   // /** */
   private setSubscriptions() {
@@ -152,6 +153,10 @@ export class ConversationHeaderComponent implements OnInit, OnChanges {
     // this.appStorageService.removeItem('activeConversation');
     // this.g.setParameter('activeConversation', null, false);
     this.onBack.emit();
+  }
+
+  closeChat(){
+    this.onCloseChat.emit()
   }
 
   returnCloseWidget() {
