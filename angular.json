@@ -44,7 +44,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/app/sass/styles.scss"
+              "src/app/sass/styles.scss",
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css"
             ],
             "scripts": [
               "src/assets/js/mqtt/4.2.6/mqtt.min.js"

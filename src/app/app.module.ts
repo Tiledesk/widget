@@ -59,6 +59,7 @@ import { environment } from 'src/environments/environment';
 import { TranslateModule } from '@ngx-translate/core';
 import { MomentModule } from 'ngx-moment';
 import { TooltipModule } from 'ng2-tooltip-directive';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 //DIRECTIVES
 import { HtmlEntitiesEncodePipe } from './directives/html-entities-encode.pipe';
@@ -290,6 +291,7 @@ export function uploadFactory(http: HttpClient, appConfig: AppConfigService, app
     ReactiveFormsModule,
     MomentModule,
     TooltipModule,
+    PickerModule,
     TranslateModule.forRoot(//),
     {
       // loader: {

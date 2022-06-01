@@ -55,6 +55,15 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
   textInputTextArea: string;
   conversationHandlerService: ConversationHandlerService
 
+  showEmojiPicker: boolean = false; //To show/hide emoji picker
+  emojiiOptions = {
+    emojiPerLine : 9,
+    totalFrequentLines: 1,
+    showPreview: false,
+    darkMode: false,
+    enableSearch: false,
+  }
+
   convertColorToRGBA = convertColorToRGBA;
   private logger: LoggerService = LoggerInstance.getInstance()
   constructor(public g: Globals,
@@ -483,6 +492,16 @@ export class ConversationFooterComponent implements OnInit, OnChanges {
         // this.restoreTextArea();
       }
     }
+  }
+
+  onEmojiiPickerClicked(){
+    this.showEmojiPicker= !this.showEmojiPicker
+    
+  }
+
+  addEmoji(event){
+    this.onEmojiiPickerClicked()
+    this.textInputTextArea = this.textInputTextArea + event.emoji.native + " "
   }
 
 

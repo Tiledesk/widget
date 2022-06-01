@@ -132,7 +132,7 @@ textarea:active{
     max-height: 110px;
     min-height: auto;
     height: 20px;
-    padding: 0px 40px;
+    padding: 0px 40px 0px 70px; //NEW FOR EMOJII BUTTON
     margin: 10px 0px 10px;
     border: none;
 }
@@ -151,6 +151,16 @@ textarea:active{
     }
 }
 
+.chat21-textarea-button:hover {
+    background: rgba(240,240,240,0.4)!important;
+    opacity: 1!important;
+    transition: all .45s ease-in-out 0s!important;
+    -moz-transition: all .45s ease-in-out 0s!important;
+    -webkit-transition: all .45s ease-in-out 0s!important;
+    padding: 0px;
+    margin: 0px;
+    border-radius: 50%;
+}
 
 #chat21-button-send {
     right: 8px;
@@ -159,6 +169,11 @@ textarea:active{
 #chat21-file{
     left: 8px;
     bottom: 10px;
+}
+
+#chat21-emoticon-picker{
+    left: 36px;
+    top: 10px;
 }
 #chat21-start-upload-doc,
 #chat21-start-mic {
@@ -203,3 +218,24 @@ textarea:active{
     -webkit-animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
     animation: fade-in-bottom 0.5s cubic-bezier(0.600, -0.280, 0.735, 0.045) 0.0s;
 }
+
+
+.emoji-container {
+    height: 312px;
+    position: absolute;
+    overflow: hidden;
+    width: 89%;
+    bottom: 100%;
+    z-index: 10;
+    left: 14px;
+}
+.emoji-mart {
+    position: absolute;
+    // bottom: 40px;
+    // left: 10px;
+    border: none;
+    margin: -2px -2px 0px;
+
+}
+
+
